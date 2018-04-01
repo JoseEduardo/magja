@@ -3,6 +3,7 @@ package net.magja.model.product;
 import net.magja.model.BaseMagentoModel;
 import com.google.common.collect.Lists;
 import net.magja.model.category.Category;
+import net.magja.soap.Configuration;
 import net.magja.service.product.ProductRemoteService;
 
 import java.security.InvalidParameterException;
@@ -118,7 +119,7 @@ public class Product extends BaseMagentoModel<Object[]> {
   }
 
   @Override
-  public Object[] serializeToApi() {
+  public Object[] serializeToApi(Configuration configuration) {
 
     Integer attributeId;
     // set the attributSet
@@ -126,10 +127,10 @@ public class Product extends BaseMagentoModel<Object[]> {
       if (attributeSet.getId() != null) {
         attributeId = attributeSet.getId();
       } else {
-        attributeId = ProductAttributeSet.getDefaultProductAttributeSet().getId();
+        attributeId = ProductAttributeSet.getDefaultProductAttributeSet(configuration).getId();
       }
     } else {
-      attributeId = ProductAttributeSet.getDefaultProductAttributeSet().getId();
+      attributeId = ProductAttributeSet.getDefaultProductAttributeSet(configuration).getId();
     }
 
     if (this.visibility != null)
@@ -366,12 +367,12 @@ public class Product extends BaseMagentoModel<Object[]> {
    * @param tierPrices
    *          set of tier prices.
    */
-  public void setTierPrices(final List<ProductTierPrice> tierPrices) {
+  public void setTierPrices(Configuration configuration, final List<ProductTierPrice> tierPrices) {
     this.tierPrices = tierPrices;
 
     List<Map<String, Object>> serializedPrices = Lists.newArrayList();
     for (ProductTierPrice tierPrice : tierPrices) {
-      serializedPrices.add(tierPrice.serializeToApi());
+      serializedPrices.add(tierPrice.serializeToApi(configuration));
     }
     set("tier_price", serializedPrices);
   }

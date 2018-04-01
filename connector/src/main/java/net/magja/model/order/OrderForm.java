@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.magja.model.address.BasicAddress;
 import net.magja.service.order.OrderRemoteService;
+import net.magja.soap.Configuration;
 
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class OrderForm extends BaseMagentoModel<Map<String, Object>> {
 	 * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
 	 */
 	@Override
-	public Map<String, Object> serializeToApi() {
+	public Map<String, Object> serializeToApi(Configuration configuration) {
 		Map<String, Object> props = getAllProperties();
 		List<Map<String, ?>> itemsApi = Lists.transform(items,	new Function<OrderFormItem, Map<String, ?>>() {
 			@Override
@@ -90,10 +91,10 @@ public class OrderForm extends BaseMagentoModel<Map<String, Object>> {
 
 		props.put("items", itemsApi);
 		if (billingAddress != null) {
-			props.put("billingAddress", billingAddress.serializeToApi());
+			props.put("billingAddress", billingAddress.serializeToApi(configuration));
 		}
 		if (shippingAddress != null) {
-			props.put("shippingAddress", shippingAddress.serializeToApi());
+			props.put("shippingAddress", shippingAddress.serializeToApi(configuration));
 		}
 		return props;
 	}

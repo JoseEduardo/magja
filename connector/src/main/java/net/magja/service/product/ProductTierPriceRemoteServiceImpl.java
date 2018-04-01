@@ -6,6 +6,7 @@ import net.magja.model.product.ProductTierPrice;
 import net.magja.service.GeneralServiceImpl;
 import net.magja.service.ServiceException;
 import com.google.common.collect.Lists;
+import net.magja.soap.Configuration;
 import net.magja.soap.SoapClient;
 import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
@@ -61,14 +62,14 @@ public class ProductTierPriceRemoteServiceImpl extends GeneralServiceImpl<Produc
   }
 
   @Override
-  public Boolean update(final Product product, final List<ProductTierPrice> tierPrices) throws ServiceException {
+  public Boolean update(Configuration configuration, final Product product, final List<ProductTierPrice> tierPrices) throws ServiceException {
     if (!ProductServiceUtil.validateProduct(product)) {
       throw new ServiceException("The product must have the id or the SKU set.");
     }
 
     List<Map<String, Object>> serializedPrices = Lists.newArrayList();
     for (final ProductTierPrice tierPrice : tierPrices) {
-      serializedPrices.add(tierPrice.serializeToApi());
+      serializedPrices.add(tierPrice.serializeToApi(configuration));
     }
 
     try {

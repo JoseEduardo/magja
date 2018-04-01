@@ -16,6 +16,7 @@ import net.magja.service.order.*;
 import net.magja.service.product.*;
 import net.magja.service.region.RegionRemoteService;
 import net.magja.service.region.RegionRemoteServiceImpl;
+import net.magja.soap.Configuration;
 import net.magja.soap.MagentoSoapClient;
 import net.magja.soap.SoapClient;
 import net.magja.soap.SoapConfig;
@@ -52,14 +53,14 @@ public class RemoteServiceFactory {
   }
 
   @Deprecated
-  public static RemoteServiceFactory getSingleton() {
-    return getSingleton(null);
+  public static RemoteServiceFactory getSingleton(Configuration configuration) {
+    return getSingleton(configuration, null);
   }
 
   @Deprecated
-  public static RemoteServiceFactory getSingleton(SoapConfig soapConfig) {
+  public static RemoteServiceFactory getSingleton(Configuration configuration, SoapConfig soapConfig) {
     if (singletonInstance == null) {
-      singletonInstance = new RemoteServiceFactory(MagentoSoapClient.getInstance(soapConfig));
+      singletonInstance = new RemoteServiceFactory(MagentoSoapClient.getInstance(configuration, soapConfig));
     }
     return singletonInstance;
   }

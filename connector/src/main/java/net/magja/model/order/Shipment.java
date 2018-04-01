@@ -6,6 +6,7 @@ package net.magja.model.order;
 
 import net.magja.model.BaseMagentoModel;
 import net.magja.soap.ArrayItemMap;
+import net.magja.soap.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Shipment extends BaseMagentoModel {
       * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
       */
     @Override
-    public Object serializeToApi() {
+    public Object serializeToApi(Configuration configuration) {
 
         List<Object> params = new ArrayList<Object>();
 

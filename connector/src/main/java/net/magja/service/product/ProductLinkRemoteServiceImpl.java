@@ -7,6 +7,7 @@ import net.magja.model.product.ProductLink.LinkType;
 import net.magja.model.product.ProductType;
 import net.magja.service.GeneralServiceImpl;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 import net.magja.soap.SoapClient;
 import org.apache.axis2.AxisFault;
 
@@ -43,13 +44,13 @@ public class ProductLinkRemoteServiceImpl extends GeneralServiceImpl<ProductLink
     return link;
   }
 
-  private Object[] buildLinkToPersist(Product product, ProductLink link) {
+  private Object[] buildLinkToPersist(Configuration configuration, Product product, ProductLink link) {
     return new Object[] { link.getLinkType().toString().toLowerCase(), product.getId() != null ? product.getId() : product.getSku(),
-        link.getId() != null ? link.getId() : link.getSku(), link.serializeToApi() };
+        link.getId() != null ? link.getId() : link.getSku(), link.serializeToApi(configuration) };
   }
 
   @Override
-  public void assign(Product product, ProductLink link) throws ServiceException {
+  public void assign(Configuration configuration, Product product, ProductLink link) throws ServiceException {
     if (!ProductServiceUtil.validateProduct(product)) {
       throw new ServiceException("the product id or sku must be set.");
     }
@@ -58,7 +59,7 @@ public class ProductLinkRemoteServiceImpl extends GeneralServiceImpl<ProductLink
     }
 
     try {
-      soapClient.callArgs(ResourcePath.ProductLinkAssign, buildLinkToPersist(product, link));
+      soapClient.callArgs(ResourcePath.ProductLinkAssign, buildLinkToPersist(configuration, product, link));
     } catch (AxisFault e) {
       if (debug) {
         e.printStackTrace();
@@ -134,7 +135,7 @@ public class ProductLinkRemoteServiceImpl extends GeneralServiceImpl<ProductLink
   }
 
   @Override
-  public void update(Product product, ProductLink link) throws ServiceException {
+  public void update(Configuration configuration, Product product, ProductLink link) throws ServiceException {
 
     if (!ProductServiceUtil.validateProduct(product)) {
       throw new ServiceException("the product id or sku must be set");
@@ -144,7 +145,7 @@ public class ProductLinkRemoteServiceImpl extends GeneralServiceImpl<ProductLink
     }
 
     try {
-      soapClient.callArgs(ResourcePath.ProductLinkUpdate, buildLinkToPersist(product, link));
+      soapClient.callArgs(ResourcePath.ProductLinkUpdate, buildLinkToPersist(configuration, product, link));
     } catch (AxisFault e) {
       if (debug) {
         e.printStackTrace();

@@ -3,6 +3,7 @@ package net.magja.service.customer;
 import net.magja.model.customer.CustomerAddress;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface CustomerAddressRemoteService extends GeneralService<CustomerAdd
    * @param customerAddress
    * @throws ServiceException
    */
-  void save(CustomerAddress customerAddress) throws ServiceException;
+  void save(Configuration connfiguration, CustomerAddress customerAddress) throws ServiceException;
 
   /**
    * Get a Customer Address by your id

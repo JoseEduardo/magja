@@ -4,6 +4,7 @@ import net.magja.utils.PropertyLoader;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
+import net.magja.soap.Configuration;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -270,7 +271,7 @@ public abstract class BaseMagentoModel<S> implements Serializable {
    *
    * @return serialized presentation to be sent to Magento Shop.
    */
-  public abstract S serializeToApi();
+  public abstract S serializeToApi(Configuration configuration);
 
   @Override
   public int hashCode() {

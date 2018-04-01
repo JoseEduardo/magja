@@ -5,6 +5,7 @@ import net.magja.model.order.Order;
 import net.magja.model.order.OrderForm;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 
 import java.util.List;
 
@@ -34,11 +35,11 @@ public interface OrderRemoteService extends GeneralService<Order> {
    * Create an {@link Order} from an {@link OrderForm}, with address from
    * Customer data.
    */
-  String create(OrderForm orderForm) throws ServiceException;
+  String create(Configuration configuration, OrderForm orderForm) throws ServiceException;
 
   /**
    * Create an {@link Order} from an {@link OrderForm}, with custom addresses.
    */
-  String createEx(OrderForm orderForm) throws ServiceException;
+  String createEx(Configuration configuration, OrderForm orderForm) throws ServiceException;
 
 }

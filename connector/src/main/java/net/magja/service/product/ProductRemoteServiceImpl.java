@@ -11,6 +11,7 @@ import net.magja.model.product.*;
 import net.magja.service.GeneralServiceImpl;
 import net.magja.service.RemoteServiceFactory;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 import net.magja.soap.SoapClient;
 import org.apache.axis2.AxisFault;
 import org.apache.commons.lang3.BooleanUtils;
@@ -516,19 +517,19 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
 
   @Override
   @Deprecated
-  public void save(Product product, Product existingProduct) throws ServiceException, NoSuchAlgorithmException {
-    save(product, existingProduct, "");
+  public void save(Configuration configuration, Product product, Product existingProduct) throws ServiceException, NoSuchAlgorithmException {
+    save(configuration, product, existingProduct, "");
   }
 
   @Override
   @Deprecated
-  public void save(Product product, Product existingProduct, String storeView) throws ServiceException, NoSuchAlgorithmException {
+  public void save(Configuration configuration, Product product, Product existingProduct, String storeView) throws ServiceException, NoSuchAlgorithmException {
     if (product.getId() != null && product.getId() > 0) {
       // means its a existing product
-      update(product, existingProduct, storeView);
+      update(configuration, product, existingProduct, storeView);
     } else {
       // means its a new product
-      add(product, storeView);
+      add(configuration, product, storeView);
     }
   }
 
@@ -559,11 +560,6 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
     }
   }
 
-  /**
-   * @param product
-   * @param existingProduct
-   * @throws ServiceException
-   */
   protected void doAssignCategories(Product product, List<Category> existingCategories) throws ServiceException {
     for (Category cat : product.getCategories()) {
       boolean found = false;
@@ -585,13 +581,13 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
     }
   }
 
-  private void assignProductMedias(Product product) throws ServiceException, NoSuchAlgorithmException {
+  private void assignProductMedias(Configuration configuration, Product product) throws ServiceException, NoSuchAlgorithmException {
     // if have media, create it too
     List<String> mediaFound = new ArrayList<String>();
     List<ProductMedia> toBeDeleted = new ArrayList<ProductMedia>();
     List<ProductMedia> existingMedias = serviceFactory.getProductMediaRemoteService().listByProduct(product);
 
-    doAssignProductMedias(product, existingMedias);
+    doAssignProductMedias(configuration, product, existingMedias);
 
     for (ProductMedia existingMedia : existingMedias) {
       boolean found = false;
@@ -622,13 +618,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
 
   }
 
-  /**
-   * @param product
-   * @param found
-   * @param existingMedias
-   * @throws ServiceException
-   */
-  protected void doAssignProductMedias(Product product, List<ProductMedia> existingMedias) throws ServiceException {
+  protected void doAssignProductMedias(Configuration configuration, Product product, List<ProductMedia> existingMedias) throws ServiceException {
     if (product.getMedias() != null) {
       if (!product.getMedias().isEmpty()) {
         for (ProductMedia media : product.getMedias()) {
@@ -652,18 +642,18 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
           if (!found) {
             if (media.getImage() != null && media.getImage().getData() != null)
               log.info("Adding media '{}' to product #{} ({}) ", new Object[] { media.getLabel(), product.getId(), product.getSku() });
-            serviceFactory.getProductMediaRemoteService().create(media);
+            serviceFactory.getProductMediaRemoteService().create(configuration, media);
           }
         }
       }
     }
   }
 
-  protected void assignProductLinks(Product product) throws ServiceException {
+  protected void assignProductLinks(Configuration configuration, Product product) throws ServiceException {
     List<ProductLink> linksToBeDeleted = new ArrayList<ProductLink>();
     Set<ProductLink> existingLinks = serviceFactory.getProductLinkRemoteService().list(product);
 
-    doAssignProductLinks(product, existingLinks);
+    doAssignProductLinks(configuration, product, existingLinks);
 
     for (ProductLink existingLink : existingLinks) {
       boolean found = false;
@@ -692,7 +682,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
    * @param existingLinks
    * @throws ServiceException
    */
-  protected void doAssignProductLinks(Product product, Set<ProductLink> existingLinks) throws ServiceException {
+  protected void doAssignProductLinks(Configuration configuration, Product product, Set<ProductLink> existingLinks) throws ServiceException {
     if (product.getLinks() != null) {
       if (!product.getLinks().isEmpty()) {
         for (ProductLink link : product.getLinks()) {
@@ -708,7 +698,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
           if (!found) {
             if (link.getLinkType() != null && (link.getId() != null || link.getSku() != null))
               log.info("Assigning " + link.getLinkType() + " Link with product : " + link.getSku());
-            serviceFactory.getProductLinkRemoteService().assign(product, link);
+            serviceFactory.getProductLinkRemoteService().assign(configuration, product, link);
           }
 
         }
@@ -752,7 +742,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
   /*
    * Handle configurable products just for insert new products
    */
-  private void handleConfigurableForNewProducts(Product product) throws ServiceException, NoSuchAlgorithmException {
+  private void handleConfigurableForNewProducts(Configuration configuration, Product product) throws ServiceException, NoSuchAlgorithmException {
 
     // if isn't a configurable product, stop the execution
     if (!product.getType().equals(ProductType.CONFIGURABLE)) {
@@ -764,7 +754,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
 
       Integer i = 0;
       for (ConfigurableAttributeData configAttr : product.getConfigurableAttributesData()) {
-        confAttrDataMap.put(i.toString(), configAttr.serializeToApi());
+        confAttrDataMap.put(i.toString(), configAttr.serializeToApi(configuration));
         i++;
       }
       product.set("configurable_attributes_data", confAttrDataMap);
@@ -790,13 +780,13 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
             }
             // update the child. this is required if the child has been created
             // on the fly.
-            this.update(child, existingProduct);
+            this.update(configuration, child, existingProduct);
           }
         } else {
           log.info("Bogus configuraion, a subproduct point to a configurable product instead of a simple.");
         }
 
-        product.getConfigurableProductsData().put(child.getId().toString(), childProductData.serializeToApi());
+        product.getConfigurableProductsData().put(child.getId().toString(), childProductData.serializeToApi(configuration));
       }
     }
   }
@@ -1028,19 +1018,19 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
   }
 
   @Override
-  public void add(Product product) throws ServiceException, NoSuchAlgorithmException {
-    add(product, "");
+  public void add(Configuration configuration, Product product) throws ServiceException, NoSuchAlgorithmException {
+    add(configuration, product, "");
   }
 
   @Override
-  public void add(Product product, String storeView) throws ServiceException, NoSuchAlgorithmException {
+  public void add(Configuration configuration, Product product, String storeView) throws ServiceException, NoSuchAlgorithmException {
     // if is a configurable product, call the proper handle
     if (product.getType().equals(ProductType.CONFIGURABLE)) {
-      handleConfigurableForNewProducts(product);
+      handleConfigurableForNewProducts(configuration, product);
     }
 
     try {
-      Object[] newProductArgs = product.serializeToApi();
+      Object[] newProductArgs = product.serializeToApi(configuration);
 
       log.info("Creating '" + product.getSku() + "'");
       int id = Integer.parseInt((String) soapClient.callArgs(ResourcePath.ProductCreate, newProductArgs));
@@ -1063,23 +1053,23 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
       updateInventory(product);
     }
 
-    doAssignProductMedias(product, ImmutableList.<ProductMedia> of());
-    doAssignProductLinks(product, ImmutableSet.<ProductLink> of());
+    doAssignProductMedias(configuration, product, ImmutableList.<ProductMedia> of());
+    doAssignProductLinks(configuration, product, ImmutableSet.<ProductLink> of());
     doAssignCategories(product, ImmutableList.<Category> of());
   }
 
   @Override
-  public void update(Product product, Product existingProduct) throws ServiceException, NoSuchAlgorithmException {
-    update(product, existingProduct, "");
+  public void update(Configuration configuration, Product product, Product existingProduct) throws ServiceException, NoSuchAlgorithmException {
+    update(configuration, product, existingProduct, "");
   }
 
   @Override
-  public void update(Product product, Product existingProduct, String storeView) throws ServiceException, NoSuchAlgorithmException {
-    update(product, existingProduct, storeView, ImmutableSet.of(Dependency.INVENTORY, Dependency.MEDIAS, Dependency.LINKS, Dependency.CATEGORIES));
+  public void update(Configuration configuration, Product product, Product existingProduct, String storeView) throws ServiceException, NoSuchAlgorithmException {
+    update(configuration, product, existingProduct, storeView, ImmutableSet.of(Dependency.INVENTORY, Dependency.MEDIAS, Dependency.LINKS, Dependency.CATEGORIES));
   }
 
   @Override
-  public void update(Product product, Product existingProduct, String storeView, Set<Dependency> dependencies)
+  public void update(Configuration configuration, Product product, Product existingProduct, String storeView, Set<Dependency> dependencies)
     throws ServiceException, NoSuchAlgorithmException {
     try {
       Map<String, Object> productData = new HashMap<String, Object>();
@@ -1099,7 +1089,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
       log.debug("{} {} returned {}", new Object[] { ResourcePath.ProductUpdate, product.getId(), callResult });
 
       if (product.getType().equals(ProductType.CONFIGURABLE)) {
-        handleConfigurableForNewProducts(product);
+        handleConfigurableForNewProducts(configuration, product);
       }
     } catch (Exception e) {
       log.error("Error updating Product " + product.getId() + " cause: " + e.getCause(), e);
@@ -1115,10 +1105,10 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
         updateInventory(product);
     }
     if (dependencies.contains(Dependency.MEDIAS)) {
-      assignProductMedias(product);
+      assignProductMedias(configuration, product);
     }
     if (dependencies.contains(Dependency.LINKS)) {
-      assignProductLinks(product);
+      assignProductLinks(configuration, product);
     }
     if (dependencies.contains(Dependency.CATEGORIES)) {
       assignCategories(product, existingProduct);

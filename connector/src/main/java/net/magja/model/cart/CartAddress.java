@@ -1,6 +1,7 @@
 package net.magja.model.cart;
 
 import net.magja.model.address.Address;
+import net.magja.soap.Configuration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class CartAddress extends Address {
 	 * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
 	 */
 	@Override
-	public Object serializeToApi() {
+	public Object serializeToApi(Configuration configuration) {
 		Map<String, Object> attrs = new HashMap<String, Object>();
 
 		attrs.put("mode", type.getName());

@@ -1,10 +1,10 @@
 /**
  * @author andre
- *
  */
 package net.magja.model.product;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class ProductLink extends BaseMagentoModel<Map<String, Object>> {
   }
 
   @Override
-  public Map<String, Object> serializeToApi() {
+  public Map<String, Object> serializeToApi(Configuration configuration) {
     final Map<String, Object> props = new HashMap<String, Object>();
     if (getPosition() != null) {
       props.put("position", getPosition());
@@ -222,6 +222,6 @@ public class ProductLink extends BaseMagentoModel<Map<String, Object>> {
   @Override
   public String toString() {
     return "ProductLink [linkType=" + linkType + ", position=" + position + ", productType=" + productType + ", qty=" + qty + ", setId=" + setId + ", sku="
-        + sku + ", id=" + id + "]";
+      + sku + ", id=" + id + "]";
   }
 }

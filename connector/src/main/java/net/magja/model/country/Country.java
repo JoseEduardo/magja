@@ -5,6 +5,7 @@
 package net.magja.model.country;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 public class Country extends BaseMagentoModel {
 
@@ -22,7 +23,7 @@ public class Country extends BaseMagentoModel {
 	 * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
 	 */
 	@Override
-	public Object serializeToApi() {
+	public Object serializeToApi(Configuration configuration) {
 		return null;
 	}
 

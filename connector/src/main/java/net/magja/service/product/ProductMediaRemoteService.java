@@ -4,6 +4,7 @@ import net.magja.model.product.Product;
 import net.magja.model.product.ProductMedia;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public interface ProductMediaRemoteService extends GeneralService<ProductMedia> 
    * @param productMedia
    * @throws ServiceException
    */
-  void create(ProductMedia productMedia) throws ServiceException;
+  void create(Configuration configuration, ProductMedia productMedia) throws ServiceException;
 
   /**
    * Delete a Product Media from magento, the object must have the product id or

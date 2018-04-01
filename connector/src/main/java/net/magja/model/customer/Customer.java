@@ -5,6 +5,7 @@
 package net.magja.model.customer;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 import net.magja.utils.MagjaStringUtils;
 
 import java.util.LinkedList;
@@ -81,7 +82,7 @@ public class Customer extends BaseMagentoModel {
 
 
   @Override
-  public Object serializeToApi() {
+  public Object serializeToApi(Configuration configuration) {
 
     Map<String, Object> props = getAllProperties();
     props.remove("customer_id");

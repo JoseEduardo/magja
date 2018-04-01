@@ -5,6 +5,7 @@
 package net.magja.model.customer;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 public class CustomerGroup extends BaseMagentoModel {
 
@@ -16,7 +17,7 @@ public class CustomerGroup extends BaseMagentoModel {
 	 * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
 	 */
 	@Override
-	public Object serializeToApi() {
+	public Object serializeToApi(Configuration configuration) {
 		return null;
 	}
 

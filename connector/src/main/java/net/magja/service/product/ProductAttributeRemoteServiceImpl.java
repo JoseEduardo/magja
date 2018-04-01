@@ -5,6 +5,7 @@ import net.magja.model.product.ProductAttribute;
 import net.magja.model.product.ProductAttributeSet;
 import net.magja.service.GeneralServiceImpl;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 import net.magja.soap.SoapClient;
 import org.apache.axis2.AxisFault;
 
@@ -164,13 +165,13 @@ public class ProductAttributeRemoteServiceImpl extends GeneralServiceImpl<Produc
   }
 
   @Override
-  public void save(ProductAttribute productAttribute) throws ServiceException {
+  public void save(Configuration configuration, ProductAttribute productAttribute) throws ServiceException {
     if (productAttribute.getId() != null || exists(productAttribute.getCode()))
       throw new ServiceException(productAttribute.getCode() + " exists already. Not allowed to update product attributes yet");
 
     Integer id = null;
     try {
-      id = Integer.parseInt((String) soapClient.callSingle(ResourcePath.ProductAttributeCreate, productAttribute.serializeToApi()));
+      id = Integer.parseInt((String) soapClient.callSingle(ResourcePath.ProductAttributeCreate, productAttribute.serializeToApi(configuration)));
     } catch (AxisFault e) {
       if (debug) {
         e.printStackTrace();

@@ -4,6 +4,7 @@ import net.magja.magento.ResourcePath;
 import net.magja.model.customer.CustomerAddress;
 import net.magja.service.GeneralServiceImpl;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 import net.magja.soap.SoapClient;
 import org.apache.axis2.AxisFault;
 
@@ -112,11 +113,11 @@ public class CustomerAddressRemoteServiceImpl extends GeneralServiceImpl<Custome
   }
 
   @Override
-  public void save(CustomerAddress customerAddress) throws ServiceException {
+  public void save(Configuration configuration, CustomerAddress customerAddress) throws ServiceException {
 
     if (customerAddress.getId() == null) {
       try {
-        Object[] customerAddressObj = customerAddress.serializeToApi();
+        Object[] customerAddressObj = customerAddress.serializeToApi(configuration);
         Integer id = Integer.parseInt((String) soapClient.callArgs(ResourcePath.CustomerAddressCreate, customerAddressObj));
         customerAddress.setId(id);
       } catch (NumberFormatException e) {
@@ -130,7 +131,7 @@ public class CustomerAddressRemoteServiceImpl extends GeneralServiceImpl<Custome
       }
     } else {
       try {
-        Boolean success = (Boolean) soapClient.callArgs(ResourcePath.CustomerAddressUpdate, customerAddress.serializeToApi());
+        Boolean success = (Boolean) soapClient.callArgs(ResourcePath.CustomerAddressUpdate, customerAddress.serializeToApi(configuration));
         if (!success)
           throw new ServiceException("Error updating Customer Address");
       } catch (AxisFault e) {

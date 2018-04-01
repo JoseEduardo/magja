@@ -5,6 +5,8 @@
 package net.magja.model.product;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
+import sun.security.krb5.Config;
 
 import java.util.List;
 import java.util.Map;
@@ -116,7 +118,7 @@ public class ProductAttribute extends BaseMagentoModel<Object[]> {
    * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
    */
   @Override
-  public Object[] serializeToApi() {
+  public Object[] serializeToApi(Configuration configuration) {
     Map<String, Object> properties = getAllProperties();
     /*
      * When list the attributes, the type property its the input, and when it

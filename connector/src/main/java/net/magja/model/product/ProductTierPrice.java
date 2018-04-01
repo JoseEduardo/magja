@@ -1,6 +1,7 @@
 package net.magja.model.product;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class ProductTierPrice extends BaseMagentoModel<Map<String, Object>> {
   private Double price;
 
   @Override
-  public Map<String, Object> serializeToApi() {
+  public Map<String, Object> serializeToApi(Configuration configuration) {
     Map<String, Object> props = getAllProperties();
     return props;
   }

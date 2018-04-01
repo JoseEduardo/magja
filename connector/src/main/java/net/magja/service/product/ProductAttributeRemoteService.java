@@ -4,6 +4,7 @@ import net.magja.model.product.ProductAttribute;
 import net.magja.model.product.ProductAttributeSet;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 
 import java.util.List;
 import java.util.Map;
@@ -71,7 +72,7 @@ public interface ProductAttributeRemoteService extends GeneralService<ProductAtt
    * @param productAttribute
    * @throws ServiceException
    */
-  void save(ProductAttribute productAttribute) throws ServiceException;
+  void save(Configuration configuration, ProductAttribute productAttribute) throws ServiceException;
 
   /**
    * Save new options for Product Attribute

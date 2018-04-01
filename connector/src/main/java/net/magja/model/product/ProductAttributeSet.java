@@ -5,6 +5,7 @@
 package net.magja.model.product;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 import net.magja.soap.MagentoSoapClient;
 import net.magja.soap.SoapClient;
 
@@ -26,7 +27,7 @@ public class ProductAttributeSet extends BaseMagentoModel {
   }
 
   @Override
-  public Object serializeToApi() {
+  public Object serializeToApi(Configuration configuration) {
     return null;
   }
 
@@ -80,8 +81,8 @@ public class ProductAttributeSet extends BaseMagentoModel {
    *
    * @return attribute set.
    */
-  public static ProductAttributeSet getDefaultProductAttributeSet() {
-    final SoapClient soapClient = MagentoSoapClient.getInstance();
+  public static ProductAttributeSet getDefaultProductAttributeSet(Configuration configuration) {
+    final SoapClient soapClient = MagentoSoapClient.getInstance(configuration);
     Integer defaultId = soapClient.getConfig().getDefaultAttributeSetId();
     return new ProductAttributeSet(defaultId, "Default");
   }

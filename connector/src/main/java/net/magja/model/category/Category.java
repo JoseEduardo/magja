@@ -1,6 +1,7 @@
 package net.magja.model.category;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -115,7 +116,7 @@ public class Category extends BaseMagentoModel {
       * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
       */
     @Override
-    public Object serializeToApi() {
+    public Object serializeToApi(Configuration configuration) {
         List<Object> newCategory = new LinkedList<Object>();
         if (getId() == null) {
             // means its a new category

@@ -1,10 +1,8 @@
 package net.magja.soap;
 
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
-import org.apache.commons.lang3.BooleanUtils;
 
 import java.io.Serializable;
-import java.util.Properties;
 
 /**
  * Configuration of the SOAP Client.
@@ -12,28 +10,9 @@ import java.util.Properties;
  * @author Simon Zambrovski
  */
 public class SoapConfig implements Serializable {
-
-  public static final String MAGENTO_API_PASSWORD = "magento-api-password";
-  public static final String MAGENTO_API_URL = "magento-api-url";
-  public static final String MAGENTO_API_USERNAME = "magento-api-username";
-  public static final String DEFAULT_ATTRIBUTE_SET_ID = "default-attribute-set-id";
-  public static final String DEFAULT_ROOT_CATEGORY_ID = "default-root-category-id";
-
-  public static final String HTTP_PROXY_ENABLED = "http-proxy-enabled";
-  public static final String HTTP_PROXY_HOST = "http-proxy-host";
-  public static final String HTTP_PROXY_PORT = "http-proxy-port";
-
-  public static final String HTTP_PROXY_AUTH_ENABLED = "http-proxy-auth-enabled";
-  public static final String HTTP_PROXY_USERNAME = "http-proxy-username";
-  public static final String HTTP_PROXY_PASSWORD = "http-proxy-password";
-
-  public static final String HTTP_AUTH_ENABLED = "http-auth-enabled";
-  public static final String HTTP_USERNAME = "http-username";
-  public static final String HTTP_PASSWORD = "http-password";
-
-
   private static final long serialVersionUID = 1L;
 
+  private Long idConfiguration;
   private String apiUser;
   private String apiKey;
   private String remoteHost;
@@ -63,26 +42,35 @@ public class SoapConfig implements Serializable {
     this.defaultRootCategoryId = 2;
   }
 
-  public SoapConfig(final Properties properties) {
-    this.apiUser = properties.getProperty(MAGENTO_API_USERNAME);
-    this.apiKey = properties.getProperty(MAGENTO_API_PASSWORD);
-    this.remoteHost = properties.getProperty(MAGENTO_API_URL);
+  public SoapConfig(final Configuration properties) {
+    this.idConfiguration = properties.getId();
+    this.apiUser = properties.getApiUser();
+    this.apiKey = properties.getApiKey();
+    this.remoteHost = properties.getRemoteHost();
 
-    this.httpAuthEnabled = BooleanUtils.toBoolean(properties.getProperty(HTTP_AUTH_ENABLED, "false"));
-    this.httpUsername = properties.getProperty(HTTP_USERNAME);
-    this.httpPassword = properties.getProperty(HTTP_PASSWORD);
+    this.httpAuthEnabled = properties.isHttpAuthEnabled();
+    this.httpUsername = properties.getHttpUsername();
+    this.httpPassword = properties.getHttpPassword();
 
-    this.defaultAttributeSetId = Integer.parseInt(properties.getProperty(DEFAULT_ATTRIBUTE_SET_ID, "4"));
-    this.defaultRootCategoryId = Integer.parseInt(properties.getProperty(DEFAULT_ROOT_CATEGORY_ID, "2"));
+    this.defaultAttributeSetId = properties.getDefaultAttributeSetId();
+    this.defaultRootCategoryId = properties.getDefaultRootCategoryId();
 
-    this.httpProxyEnabled = BooleanUtils.toBoolean(properties.getProperty(HTTP_PROXY_ENABLED, "false"));
-    this.httpProxyHost = properties.getProperty(HTTP_PROXY_HOST, "localhost");
-    this.httpProxyPort = Short.parseShort(properties.getProperty(DEFAULT_ATTRIBUTE_SET_ID, "8080"));
+    this.httpProxyEnabled = properties.isHttpProxyEnabled();
+    this.httpProxyHost = properties.getHttpProxyHost();
+    this.httpProxyPort = properties.getHttpProxyPort();
 
-    this.httpProxyAuthEnabled = BooleanUtils.toBoolean(properties.getProperty(HTTP_PROXY_AUTH_ENABLED, "false"));
-    this.httpProxyUsername = properties.getProperty(HTTP_PROXY_USERNAME);
-    this.httpProxyPassword = properties.getProperty(HTTP_PROXY_PASSWORD);
+    this.httpProxyAuthEnabled = properties.isHttpProxyAuthEnabled();
+    this.httpProxyUsername = properties.getHttpProxyUsername();
+    this.httpProxyPassword = properties.getHttpProxyPassword();
 
+  }
+
+  public Long getIdConfiguration() {
+    return idConfiguration;
+  }
+
+  public void setIdConfiguration(Long idConfiguration) {
+    this.idConfiguration = idConfiguration;
   }
 
   public HttpConnectionManagerParams getHttpConnectionManagerParams() {
@@ -189,6 +177,7 @@ public class SoapConfig implements Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + ((idConfiguration == null) ? 0 : idConfiguration.hashCode());
     result = prime * result + ((apiUser == null) ? 0 : apiUser.hashCode());
     result = prime * result + ((defaultAttributeSetId == null) ? 0 : defaultAttributeSetId.hashCode());
     result = prime * result + ((defaultRootCategoryId == null) ? 0 : defaultRootCategoryId.hashCode());
@@ -215,6 +204,14 @@ public class SoapConfig implements Serializable {
       return false;
     }
     SoapConfig other = (SoapConfig) obj;
+    if (idConfiguration == null) {
+      if (other.idConfiguration != null) {
+        return false;
+      }
+    } else if (!idConfiguration.equals(other.idConfiguration)) {
+      return false;
+    }
+
     if (apiUser == null) {
       if (other.apiUser != null) {
         return false;
@@ -285,10 +282,10 @@ public class SoapConfig implements Serializable {
 
   @Override
   public String toString() {
-    return "SoapConfig [remoteHost=" + remoteHost + ", apiUser=" + apiUser + ", defaultAttributeSetId=" + defaultAttributeSetId + ", defaultRootCategoryId="
-        + defaultRootCategoryId + ", httpProxyEnabled=" + httpProxyEnabled + ", httpProxyHost=" + httpProxyHost + ", httpProxyPort=" + httpProxyPort
-        + ", httpProxyAuthEnabled=" + httpProxyAuthEnabled + ", httpProxyUsername=" + httpProxyUsername + ", httpAuthEnabled=" + httpAuthEnabled
-        + ", httpUsername=" + httpUsername + "]";
+    return "SoapConfig [remoteHost=" + remoteHost + ", idConfiguration=" + idConfiguration + ", apiUser=" + apiUser + ", defaultAttributeSetId=" + defaultAttributeSetId + ", defaultRootCategoryId="
+      + defaultRootCategoryId + ", httpProxyEnabled=" + httpProxyEnabled + ", httpProxyHost=" + httpProxyHost + ", httpProxyPort=" + httpProxyPort
+      + ", httpProxyAuthEnabled=" + httpProxyAuthEnabled + ", httpProxyUsername=" + httpProxyUsername + ", httpAuthEnabled=" + httpAuthEnabled
+      + ", httpUsername=" + httpUsername + "]";
   }
 
   public boolean isHttpAuthEnabled() {

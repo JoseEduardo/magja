@@ -6,6 +6,7 @@ import net.magja.model.customer.Customer.Gender;
 import net.magja.model.order.*;
 import net.magja.service.GeneralServiceImpl;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 import net.magja.soap.SoapClient;
 import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
@@ -237,9 +238,9 @@ public class OrderRemoteServiceImpl extends GeneralServiceImpl<Order> implements
   }
 
   @Override
-  public String create(OrderForm orderForm) throws ServiceException {
+  public String create(Configuration configuration, OrderForm orderForm) throws ServiceException {
     try {
-      String result = soapClient.callSingle(ResourcePath.SalesOrderCreate, orderForm.serializeToApi());
+      String result = soapClient.callSingle(ResourcePath.SalesOrderCreate, orderForm.serializeToApi(configuration));
       return result;
     } catch (AxisFault e) {
       log.debug("Error when creating OrderForm " + orderForm, e);
@@ -248,9 +249,9 @@ public class OrderRemoteServiceImpl extends GeneralServiceImpl<Order> implements
   }
 
   @Override
-  public String createEx(OrderForm orderForm) throws ServiceException {
+  public String createEx(Configuration configuration, OrderForm orderForm) throws ServiceException {
     try {
-      String result = soapClient.callSingle(ResourcePath.SalesOrderCreateEx, orderForm.serializeToApi());
+      String result = soapClient.callSingle(ResourcePath.SalesOrderCreateEx, orderForm.serializeToApi(configuration));
       return result;
     } catch (AxisFault e) {
       log.debug("Error when creating OrderForm " + orderForm, e);

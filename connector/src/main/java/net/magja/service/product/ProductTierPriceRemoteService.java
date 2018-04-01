@@ -4,6 +4,7 @@ import net.magja.model.product.Product;
 import net.magja.model.product.ProductTierPrice;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 
 import java.util.List;
 
@@ -36,5 +37,5 @@ public interface ProductTierPriceRemoteService extends GeneralService<ProductTie
    * @throws ServiceException
    *           on any errors.
    */
-  Boolean update(Product product, List<ProductTierPrice> tierPrices) throws ServiceException;
+  Boolean update(Configuration configuration, Product product, List<ProductTierPrice> tierPrices) throws ServiceException;
 }

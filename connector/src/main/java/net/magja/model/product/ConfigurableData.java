@@ -1,6 +1,7 @@
 package net.magja.model.product;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 /**
  * Holder for configurable product linking.
@@ -18,7 +19,7 @@ public class ConfigurableData extends BaseMagentoModel {
   private Double pricingValue;
 
   @Override
-  public Object serializeToApi() {
+  public Object serializeToApi(Configuration configuration) {
     return getAllProperties();
   }
 

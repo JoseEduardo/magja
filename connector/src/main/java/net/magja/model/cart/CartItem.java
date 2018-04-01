@@ -1,6 +1,7 @@
 package net.magja.model.cart;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 /**
  * @author schneider
@@ -22,7 +23,7 @@ public class CartItem extends BaseMagentoModel {
 	 * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
 	 */
 	@Override
-	public Object serializeToApi() {
+	public Object serializeToApi(Configuration configuration) {
 		return null;
 	}
 

@@ -5,6 +5,7 @@
 package net.magja.model.customer;
 
 import net.magja.model.address.Address;
+import net.magja.soap.Configuration;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class CustomerAddress extends Address<Object[]> {
 	 * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
 	 */
 	@Override
-	public Object[] serializeToApi() {
+	public Object[] serializeToApi(Configuration configuration) {
 
 		Map<String, Object> props = getAllProperties();
 		props.remove("customer_address_id");

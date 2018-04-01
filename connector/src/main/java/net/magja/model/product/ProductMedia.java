@@ -1,14 +1,14 @@
 /**
  * @author andre
- *
  */
 package net.magja.model.product;
 
-import net.magja.model.BaseMagentoModel;
-import net.magja.model.media.Media;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import net.magja.model.BaseMagentoModel;
+import net.magja.model.media.Media;
+import net.magja.soap.Configuration;
 
 import java.util.List;
 import java.util.Map;
@@ -67,7 +67,7 @@ public class ProductMedia extends BaseMagentoModel<Object[]> {
    * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
    */
   @Override
-  public Object[] serializeToApi() {
+  public Object[] serializeToApi(Configuration configuration) {
     Map<String, Object> props = getAllProperties();
     props.remove("url");
 
@@ -78,12 +78,12 @@ public class ProductMedia extends BaseMagentoModel<Object[]> {
           return input.toString().toLowerCase();
         }
       }));
-      props.put("types", str_types.toArray(new String[] {}));
+      props.put("types", str_types.toArray(new String[]{}));
     }
 
     props.put("file", image.serializeToApi());
 
-    return new Object[] { product.getSku(), props };
+    return new Object[]{product.getSku(), props};
   }
 
   /**
@@ -293,6 +293,6 @@ public class ProductMedia extends BaseMagentoModel<Object[]> {
   @Override
   public String toString() {
     return "ProductMedia [exclude=" + exclude + ", file=" + file + ", image=" + image + ", label=" + label + ", position=" + position + ", types=" + types
-        + ", url=" + url + ", properties=" + properties + "]";
+      + ", url=" + url + ", properties=" + properties + "]";
   }
 }

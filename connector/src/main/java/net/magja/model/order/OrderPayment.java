@@ -5,6 +5,7 @@
 package net.magja.model.order;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 public class OrderPayment extends BaseMagentoModel {
 
@@ -14,7 +15,7 @@ public class OrderPayment extends BaseMagentoModel {
      * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
      */
     @Override
-    public Object serializeToApi() {
+    public Object serializeToApi(Configuration configuration) {
         return null;
     }
 

@@ -5,6 +5,7 @@
 package net.magja.model.order;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 public class OrderItem extends BaseMagentoModel {
 
@@ -50,7 +51,7 @@ public class OrderItem extends BaseMagentoModel {
 	 * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
 	 */
 	@Override
-	public Object serializeToApi() {
+	public Object serializeToApi(Configuration configuration) {
 		return null;
 	}
 

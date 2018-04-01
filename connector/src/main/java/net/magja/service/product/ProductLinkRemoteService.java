@@ -5,6 +5,7 @@ import net.magja.model.product.ProductLink;
 import net.magja.model.product.ProductLink.LinkType;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 
 import java.util.Set;
 
@@ -42,7 +43,7 @@ public interface ProductLinkRemoteService extends GeneralService<ProductLink> {
    * @param link
    * @throws ServiceException
    */
-  void assign(Product product, ProductLink link) throws ServiceException;
+  void assign(Configuration configuration, Product product, ProductLink link) throws ServiceException;
 
   /**
    * Update a product link from a product
@@ -51,7 +52,7 @@ public interface ProductLinkRemoteService extends GeneralService<ProductLink> {
    * @param link
    * @throws ServiceException
    */
-  void update(Product product, ProductLink link) throws ServiceException;
+  void update(Configuration configuration, Product product, ProductLink link) throws ServiceException;
 
   /**
    * Remove a product link from a product

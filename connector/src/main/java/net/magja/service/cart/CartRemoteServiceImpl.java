@@ -23,6 +23,7 @@ import net.magja.model.cart.CartTotal;
 import net.magja.model.product.Product;
 import net.magja.service.GeneralServiceImpl;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 import net.magja.soap.SoapClient;
 import org.apache.axis2.AxisFault;
 
@@ -175,13 +176,13 @@ public class CartRemoteServiceImpl extends GeneralServiceImpl<Cart> implements C
   }
 
   @Override
-  public void setAddresses(Cart cart) throws ServiceException {
+  public void setAddresses(Configuration configuration, Cart cart) throws ServiceException {
     try {
       List<Object> list = new LinkedList<Object>();
       cart.getShippingAddress().setType(Type.Shipping);
       cart.getBillingAddress().setType(Type.Billing);
-      list.add(cart.getShippingAddress().serializeToApi());
-      list.add(cart.getBillingAddress().serializeToApi());
+      list.add(cart.getShippingAddress().serializeToApi(configuration));
+      list.add(cart.getBillingAddress().serializeToApi(configuration));
 
       // List<Object> params = new LinkedList<Object>();
       // params.add(cart.getId());

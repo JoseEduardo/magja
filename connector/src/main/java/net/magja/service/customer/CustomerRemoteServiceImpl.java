@@ -7,6 +7,7 @@ import net.magja.model.customer.CustomerFilter;
 import net.magja.model.customer.CustomerGroup;
 import net.magja.service.GeneralServiceImpl;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 import net.magja.soap.SoapClient;
 import org.apache.axis2.AxisFault;
 
@@ -76,8 +77,8 @@ public class CustomerRemoteServiceImpl extends GeneralServiceImpl<Customer> impl
   }
 
   @Override
-  public void deleteAll() throws ServiceException {
-    List<Customer> customers = list();
+  public void deleteAll(Configuration configuration) throws ServiceException {
+    List<Customer> customers = list(configuration);
     for (Customer customer : customers) {
       delete(customer.getId());
     }
@@ -102,7 +103,7 @@ public class CustomerRemoteServiceImpl extends GeneralServiceImpl<Customer> impl
   }
 
   @Override
-  public List<Customer> list(Customer filter) throws ServiceException {
+  public List<Customer> list(Configuration configuration, Customer filter) throws ServiceException {
 
     List<Customer> customers = new ArrayList<Customer>();
 
@@ -116,7 +117,7 @@ public class CustomerRemoteServiceImpl extends GeneralServiceImpl<Customer> impl
     }
 
     if (filter != null)
-      params = filter.serializeToApi();
+      params = filter.serializeToApi(configuration);
 
     List<Map<String, Object>> resultList = null;
     try {
@@ -168,16 +169,16 @@ public class CustomerRemoteServiceImpl extends GeneralServiceImpl<Customer> impl
   }
 
   @Override
-  public List<Customer> list() throws ServiceException {
-    return list(null);
+  public List<Customer> list(Configuration configuration) throws ServiceException {
+    return list(configuration, null);
   }
 
   @Override
-  public void save(Customer customer) throws ServiceException {
+  public void save(Configuration configuration, Customer customer) throws ServiceException {
 
     if (customer.getId() == null) {
       try {
-        Integer id = Integer.parseInt((String) soapClient.callSingle(ResourcePath.CustomerCreate, customer.serializeToApi()));
+        Integer id = Integer.parseInt((String) soapClient.callSingle(ResourcePath.CustomerCreate, customer.serializeToApi(configuration)));
         customer.setId(id);
       } catch (NumberFormatException e) {
         if (debug)
@@ -190,7 +191,7 @@ public class CustomerRemoteServiceImpl extends GeneralServiceImpl<Customer> impl
       }
     } else {
       try {
-        Boolean success = (Boolean) soapClient.callSingle(ResourcePath.CustomerUpdate, customer.serializeToApi());
+        Boolean success = (Boolean) soapClient.callSingle(ResourcePath.CustomerUpdate, customer.serializeToApi(configuration));
         if (!success)
           throw new ServiceException("Error updating Customer");
       } catch (AxisFault e) {

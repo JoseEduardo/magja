@@ -6,6 +6,7 @@ import net.magja.model.product.ProductType;
 import net.magja.model.product.ProductUpdatePrice;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -95,14 +96,14 @@ public interface ProductRemoteService extends GeneralService<Product> {
    *
    * @param product
    */
-  void add(Product product) throws ServiceException, NoSuchAlgorithmException;
+  void add(Configuration configuration, Product product) throws ServiceException, NoSuchAlgorithmException;
 
   /**
    * Create a product to Magento.
    *
    * @param product
    */
-  void add(Product product, String storeView) throws ServiceException, NoSuchAlgorithmException;
+  void add(Configuration configuration, Product product, String storeView) throws ServiceException, NoSuchAlgorithmException;
 
   /**
    * Update a product.
@@ -113,7 +114,7 @@ public interface ProductRemoteService extends GeneralService<Product> {
    *          The old product data object. Used to compare which data needs to
    *          be updated.
    */
-  void update(Product product, Product existingProduct) throws ServiceException, NoSuchAlgorithmException;
+  void update(Configuration configuration, Product product, Product existingProduct) throws ServiceException, NoSuchAlgorithmException;
 
   /**
    * Update a product.
@@ -124,7 +125,7 @@ public interface ProductRemoteService extends GeneralService<Product> {
    *          The old product data object. Used to compare which data needs to
    *          be updated.
    */
-  void update(Product product, Product existingProduct, String storeView) throws ServiceException, NoSuchAlgorithmException;
+  void update(Configuration configuration, Product product, Product existingProduct, String storeView) throws ServiceException, NoSuchAlgorithmException;
 
   /**
    * Save a product to the Magento, if the id attribute is null, then will
@@ -139,7 +140,7 @@ public interface ProductRemoteService extends GeneralService<Product> {
    *             {@link ProductRemoteService#update(Product)}.
    */
   @Deprecated
-  void save(Product product, Product existingProduct) throws ServiceException, NoSuchAlgorithmException;
+  void save(Configuration configuration, Product product, Product existingProduct) throws ServiceException, NoSuchAlgorithmException;
 
   /**
    * Save a product to the Magento, if the id attribute is null, then will
@@ -152,7 +153,7 @@ public interface ProductRemoteService extends GeneralService<Product> {
    *             {@link ProductRemoteService#update(Product)}.
    */
   @Deprecated
-  void save(Product product, Product existingProduct, String storeView) throws ServiceException, NoSuchAlgorithmException;
+  void save(Configuration configuration, Product product, Product existingProduct, String storeView) throws ServiceException, NoSuchAlgorithmException;
 
   /**
    * Remove a product from magento with the specified id
@@ -271,7 +272,7 @@ public interface ProductRemoteService extends GeneralService<Product> {
    */
   void updatePrice(List<ProductUpdatePrice> products) throws ServiceException;
 
-  void update(Product product, Product existingProduct, String storeView, Set<Dependency> dependencies) throws ServiceException, NoSuchAlgorithmException;
+  void update(Configuration configuration, Product product, Product existingProduct, String storeView, Set<Dependency> dependencies) throws ServiceException, NoSuchAlgorithmException;
 
   void updateInventory(Product product, Map<String, Object> properties) throws ServiceException;
 

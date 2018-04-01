@@ -5,6 +5,7 @@
 package net.magja.model.category;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class CategoryAttribute extends BaseMagentoModel {
 	 * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
 	 */
 	@Override
-	public Object serializeToApi() {
+	public Object serializeToApi(Configuration configuration) {
 		// TODO Auto-generated method stub
 		return null;
 	}

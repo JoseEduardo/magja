@@ -17,6 +17,7 @@ package net.magja.model.cart;
 
 import net.magja.model.BaseMagentoModel;
 import net.magja.model.customer.Customer;
+import net.magja.soap.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,7 @@ public class Cart extends BaseMagentoModel {
 	}
 
 	@Override
-	public Object serializeToApi() {
+	public Object serializeToApi(Configuration configuration) {
 		return null;
 	}
 

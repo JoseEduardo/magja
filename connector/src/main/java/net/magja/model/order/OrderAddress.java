@@ -5,6 +5,7 @@
 package net.magja.model.order;
 
 import net.magja.model.address.Address;
+import net.magja.soap.Configuration;
 
 public class OrderAddress extends Address {
 
@@ -14,7 +15,7 @@ public class OrderAddress extends Address {
 	 * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
 	 */
 	@Override
-	public Object serializeToApi() {
+	public Object serializeToApi(Configuration configuration) {
 		return null;
 	}
 

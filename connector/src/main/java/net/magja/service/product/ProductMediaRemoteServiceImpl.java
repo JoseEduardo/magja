@@ -5,6 +5,7 @@ import net.magja.model.product.Product;
 import net.magja.model.product.ProductMedia;
 import net.magja.service.GeneralServiceImpl;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 import net.magja.soap.SoapClient;
 import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
@@ -178,7 +179,7 @@ public class ProductMediaRemoteServiceImpl extends GeneralServiceImpl<ProductMed
    * .google.magja.model.product.ProductMedia)
    */
   @Override
-  public void create(ProductMedia productMedia) throws ServiceException {
+  public void create(Configuration configuration, ProductMedia productMedia) throws ServiceException {
     if (!ProductServiceUtil.validateProduct(productMedia.getProduct()))
       throw new ServiceException("the product attribute for the media must be setted.");
 
@@ -189,7 +190,7 @@ public class ProductMediaRemoteServiceImpl extends GeneralServiceImpl<ProductMed
       throw new ServiceException("invalid binary data for the image.");
 
     try {
-      String result = (String) soapClient.callArgs(ResourcePath.ProductAttributeMediaCreate, productMedia.serializeToApi());
+      String result = (String) soapClient.callArgs(ResourcePath.ProductAttributeMediaCreate, productMedia.serializeToApi(configuration));
 
       productMedia.setFile(result);
 

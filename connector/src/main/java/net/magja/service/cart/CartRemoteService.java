@@ -19,6 +19,7 @@ import net.magja.model.cart.Cart;
 import net.magja.model.product.Product;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 
 /**
  * @author schneider
@@ -85,7 +86,7 @@ public interface CartRemoteService extends GeneralService<Cart> {
    * @param cart
    * @throws ServiceException
    */
-  public abstract void setAddresses(Cart cart) throws ServiceException;
+  public abstract void setAddresses(Configuration configuration, Cart cart) throws ServiceException;
 
   /**
    * add product to shopping cart

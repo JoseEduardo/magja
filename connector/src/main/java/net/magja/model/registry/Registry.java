@@ -1,6 +1,7 @@
 package net.magja.model.registry;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,7 +12,7 @@ import net.magja.model.BaseMagentoModel;
  */
 public class Registry extends BaseMagentoModel {
     @Override
-    public Object serializeToApi() {
+    public Object serializeToApi(Configuration configuration) {
         return "";
     }
 }

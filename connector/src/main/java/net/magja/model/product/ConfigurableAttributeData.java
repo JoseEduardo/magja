@@ -5,6 +5,7 @@
 package net.magja.model.product;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class ConfigurableAttributeData extends BaseMagentoModel {
   private List<ConfigurableData> values;
 
   @Override
-  public Object serializeToApi() {
+  public Object serializeToApi(Configuration configuration) {
 
     Map<String, Object> props = getAllProperties();
     props.remove(values);

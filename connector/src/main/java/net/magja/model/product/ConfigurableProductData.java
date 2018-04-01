@@ -1,6 +1,7 @@
 package net.magja.model.product;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,13 +24,13 @@ public class ConfigurableProductData extends BaseMagentoModel {
   private List<ConfigurableData> data = new ArrayList<ConfigurableData>();
 
   @Override
-  public Map<String, Object> serializeToApi() {
+  public Map<String, Object> serializeToApi(Configuration configuration) {
 
     if (data != null) {
       Integer i = 0;
       Map<String, Object> result = new HashMap<String, Object>();
       for (ConfigurableData configurableData : data) {
-        result.put(i.toString(), configurableData.serializeToApi());
+        result.put(i.toString(), configurableData.serializeToApi(configuration));
         i++;
       }
       return result;

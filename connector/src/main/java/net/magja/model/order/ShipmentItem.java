@@ -5,6 +5,7 @@
 package net.magja.model.order;
 
 import net.magja.model.BaseMagentoModel;
+import net.magja.soap.Configuration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,9 +32,7 @@ public class ShipmentItem extends BaseMagentoModel {
       * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
       */
     @Override
-    public Object serializeToApi() {
-
-
+    public Object serializeToApi(Configuration configuration) {
         Map<Integer, Integer> item = new HashMap<Integer, Integer>();
         item.put(orderItemId, qty.intValue());
 

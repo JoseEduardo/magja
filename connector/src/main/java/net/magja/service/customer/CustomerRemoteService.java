@@ -6,6 +6,7 @@ import net.magja.model.customer.CustomerFilter;
 import net.magja.model.customer.CustomerGroup;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
+import net.magja.soap.Configuration;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface CustomerRemoteService extends GeneralService<Customer> {
    * @param customer
    * @throws ServiceException
    */
-  void save(Customer customer) throws ServiceException;
+  void save(Configuration configuration, Customer customer) throws ServiceException;
 
   /**
    * Get a Customer by your id
@@ -41,7 +42,7 @@ public interface CustomerRemoteService extends GeneralService<Customer> {
    * @return List<Customer>
    * @throws ServiceException
    */
-  List<Customer> list(Customer filter) throws ServiceException;
+  List<Customer> list(Configuration configuration, Customer filter) throws ServiceException;
 
   /**
    * List customers based of the filter specified
@@ -58,7 +59,7 @@ public interface CustomerRemoteService extends GeneralService<Customer> {
    * @return List<Customer>
    * @throws ServiceException
    */
-  List<Customer> list() throws ServiceException;
+  List<Customer> list(Configuration configuration) throws ServiceException;
 
   /**
    * Delete a customer with the specified id
@@ -73,7 +74,7 @@ public interface CustomerRemoteService extends GeneralService<Customer> {
    *
    * @throws ServiceException
    */
-  void deleteAll() throws ServiceException;
+  void deleteAll(Configuration configuration) throws ServiceException;
 
   /**
    * @return list of all customer groups on magento

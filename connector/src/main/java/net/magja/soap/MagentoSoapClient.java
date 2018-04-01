@@ -1,7 +1,7 @@
 package net.magja.soap;
 
-import net.magja.magento.ResourcePath;
 import com.google.common.base.Preconditions;
+import net.magja.magento.ResourcePath;
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.Constants;
@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PreDestroy;
 import javax.xml.namespace.QName;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -30,9 +28,6 @@ import java.util.*;
  * @author Simon Zambrovski
  */
 public class MagentoSoapClient implements SoapClient {
-
-  public static final String CONFIG_PROPERTIES_FILE = "magento-api";
-
   private static final Logger log = LoggerFactory.getLogger(MagentoSoapClient.class);
   private static final QName LOGIN_RETURN = new QName("loginReturn");
   private static final QName LOGOUT_RETURN = new QName("endSessionReturn");
@@ -48,6 +43,12 @@ public class MagentoSoapClient implements SoapClient {
   // holds all the created instances by creation order, Multiton Pattern
   private static final Map<SoapConfig, SoapClient> INSTANCES = new LinkedHashMap<SoapConfig, SoapClient>();
 
+  private static Optional<Map.Entry<SoapConfig, SoapClient>> getByConfiguration(Configuration configuration) {
+    return INSTANCES.entrySet().stream()
+      .filter(x -> x.getKey().getIdConfiguration().equals(configuration.getId()))
+      .findFirst();
+  }
+
   /**
    * Returns the default instance, or a newly created one from the
    * magento-api.properties file, if there is no default instance. The default
@@ -55,8 +56,15 @@ public class MagentoSoapClient implements SoapClient {
    *
    * @return the default instance or a newly created one
    */
-  public static SoapClient getInstance() {
-    return (INSTANCES.size() == 0) ? getInstance(null) : INSTANCES.values().iterator().next();
+  public static SoapClient getInstance(Configuration configuration) {
+
+    Optional<Map.Entry<SoapConfig, SoapClient>> soapStorage = getByConfiguration(configuration);
+
+    SoapClient soapClient = !soapStorage.isPresent() ? getInstance(configuration, null) : soapStorage.get().getValue();
+    if (soapClient.getConfig().getIdConfiguration().equals(configuration.getId())) {
+      return soapClient;
+    }
+    return null;
   }
 
   /**
@@ -65,31 +73,19 @@ public class MagentoSoapClient implements SoapClient {
    *
    * @return the already created instance or a new one
    */
-  public static SoapClient getInstance(final SoapConfig soapConfig) {
+  public static SoapClient getInstance(Configuration configuration, final SoapConfig soapConfig) {
     // if has default instance and soapConfig is null
-    if (INSTANCES.size() > 0 && soapConfig == null)
-      return INSTANCES.values().iterator().next();
+    Optional<Map.Entry<SoapConfig, SoapClient>> soapStorage = getByConfiguration(configuration);
+    if (soapStorage.isPresent()) {
+      return soapStorage.get().getValue();
+    }
 
     synchronized (INSTANCES) {
-
       SoapConfig loadedSoapConfig = null;
       if (soapConfig == null) {
-        InputStream configStream = SoapClient.class.getResourceAsStream("/magento-api.properties");
-        if (configStream != null) {
-          log.info("/magento-api.properties found in classpath, trying to load using java.util.Properties");
-          Properties props = new Properties();
-          try {
-            props.load(configStream);
-            loadedSoapConfig = new SoapConfig(props);
-          } catch (IOException e) {
-            log.error("Cannot load /magento-api.properties from classpath", e);
-          }
-        } else {
-          log.error("/magento-api.properties not found in classpath");
-        }
-
+        loadedSoapConfig = new SoapConfig(configuration);
         if (loadedSoapConfig == null) { // still null?
-          throw new RuntimeException("Cannot create soapConfig, make sure /magento-api.properties is in classpath, or provide your own SoapConfig instance");
+          throw new RuntimeException("Cannot create soapConfig");
         }
       } else {
         loadedSoapConfig = soapConfig;
@@ -172,10 +168,8 @@ public class MagentoSoapClient implements SoapClient {
    * Use to change the connection parameters to API (apiUser, apiKey,
    * remoteHost)
    *
+   * @param config the config to set
    * @deprecated, please create a new magento soap client instead.
-   *
-   * @param config
-   *          the config to set
    */
   @Deprecated
   public void setConfig(SoapConfig config) throws AxisFault {
@@ -183,12 +177,6 @@ public class MagentoSoapClient implements SoapClient {
     login();
   }
 
-  /**
-   * Public version of call.
-   *
-   * @see net.magja.soap.SoapClient#callArgs(net.magja.magento
-   *      .ResourcePath, Object[])
-   */
   @Override
   public <R> R callArgs(final ResourcePath path, Object[] args) throws AxisFault {
     final String pathString = path.getPath();
@@ -200,7 +188,7 @@ public class MagentoSoapClient implements SoapClient {
     if (arg != null && arg.getClass().isArray())
       log.warn("Passing array argument to callSingle {}, probably you want to call callArgs?", path);
     final String pathString = path.getPath();
-    return call(pathString, new Object[] { arg });
+    return call(pathString, new Object[]{arg});
   }
 
   /**
@@ -217,7 +205,7 @@ public class MagentoSoapClient implements SoapClient {
     if (args != null && args.getClass().isArray()) {
       args = Arrays.asList((Object[]) args);
     }
-    log.info("Calling {} {} at {}@{} with session {}", new Object[] { pathString, args, config.getApiUser(), config.getRemoteHost(), sessionId });
+    log.info("Calling {} {} at {}@{} with session {}", new Object[]{pathString, args, config.getApiUser(), config.getRemoteHost(), sessionId});
     OMElement method = callFactory.createCall(sessionId, pathString, args);
 
     // try {
@@ -276,8 +264,7 @@ public class MagentoSoapClient implements SoapClient {
   /**
    * Creates and configures the HTTP connection used for Magento calls.
    *
-   * @throws AxisFault
-   *           on all errors.
+   * @throws AxisFault on all errors.
    */
   protected void prepareConnection(final HttpConnectionManagerParams params) throws AxisFault {
     final Options connectOptions = new Options();
