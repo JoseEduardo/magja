@@ -780,7 +780,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
             }
             // update the child. this is required if the child has been created
             // on the fly.
-            this.update(configuration, child, existingProduct);
+            this.save(configuration, child, existingProduct);
           }
         } else {
           log.info("Bogus configuraion, a subproduct point to a configurable product instead of a simple.");
