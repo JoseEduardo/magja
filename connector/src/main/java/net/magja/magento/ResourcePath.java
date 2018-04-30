@@ -114,7 +114,10 @@ public enum ResourcePath {
     ShoppingCartOrder("cart.order"),
     ShoppingCartCustomerSet("cart_customer.set"),
     ShoppingCartCustomerAddresses("cart_customer.addresses"),
-    ShoppingCartProductAdd("cart_product.add");
+    ShoppingCartProductAdd("cart_product.add"),
+
+    StoreInfo("store.info"),
+    StoreList("store.list");
 
     private String path;
 

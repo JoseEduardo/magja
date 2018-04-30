@@ -16,6 +16,8 @@ import net.magja.service.order.*;
 import net.magja.service.product.*;
 import net.magja.service.region.RegionRemoteService;
 import net.magja.service.region.RegionRemoteServiceImpl;
+import net.magja.service.store.StoreRemoteService;
+import net.magja.service.store.StoreRemoteServiceImpl;
 import net.magja.soap.Configuration;
 import net.magja.soap.MagentoSoapClient;
 import net.magja.soap.SoapClient;
@@ -47,6 +49,7 @@ public class RemoteServiceFactory {
   private CategoryAttributeRemoteService categoryAttributeRemoteService;
   private CartRemoteService cartRemoteService;
   private ProductTierPriceRemoteService productTierPriceRemoteService;
+  private StoreRemoteService storeRemoteService;
 
   public RemoteServiceFactory(final SoapClient magentoClient) {
     this.magentoClient = magentoClient;
@@ -63,6 +66,14 @@ public class RemoteServiceFactory {
       singletonInstance = new RemoteServiceFactory(MagentoSoapClient.getInstance(configuration, soapConfig));
     }
     return singletonInstance;
+  }
+
+  /**
+   * @return the shipmentRemoteService
+   */
+  public StoreRemoteService getStoreRemoteService() {
+    StoreRemoteService storeRemoteService = new StoreRemoteServiceImpl(magentoClient);
+    return storeRemoteService;
   }
 
   /**
