@@ -117,7 +117,12 @@ public enum ResourcePath {
     ShoppingCartProductAdd("cart_product.add"),
 
     StoreInfo("store.info"),
-    StoreList("store.list");
+    StoreList("store.list"),
+
+    Version("utils_version.getVersion"),
+
+    PaymentMethods("sales_order_payment.getAllPaymentMethods"),
+    ShippingMethods("sales_order_shipping.getAllShippingMethods");
 
     private String path;
 
