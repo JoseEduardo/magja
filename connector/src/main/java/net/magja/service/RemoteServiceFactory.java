@@ -12,12 +12,18 @@ import net.magja.service.customer.CustomerAddressRemoteService;
 import net.magja.service.customer.CustomerAddressRemoteServiceImpl;
 import net.magja.service.customer.CustomerRemoteService;
 import net.magja.service.customer.CustomerRemoteServiceImpl;
+import net.magja.service.methods.payment.PaymentMethodRemoteService;
+import net.magja.service.methods.payment.PaymentMethodRemoteServiceImpl;
+import net.magja.service.methods.shipping.ShippingMethodRemoteService;
+import net.magja.service.methods.shipping.ShippingMethodRemoteServiceImpl;
 import net.magja.service.order.*;
 import net.magja.service.product.*;
 import net.magja.service.region.RegionRemoteService;
 import net.magja.service.region.RegionRemoteServiceImpl;
 import net.magja.service.store.StoreRemoteService;
 import net.magja.service.store.StoreRemoteServiceImpl;
+import net.magja.service.version.VersionRemoteService;
+import net.magja.service.version.VersionRemoteServiceImpl;
 import net.magja.soap.Configuration;
 import net.magja.soap.MagentoSoapClient;
 import net.magja.soap.SoapClient;
@@ -50,6 +56,9 @@ public class RemoteServiceFactory {
   private CartRemoteService cartRemoteService;
   private ProductTierPriceRemoteService productTierPriceRemoteService;
   private StoreRemoteService storeRemoteService;
+  private ShippingMethodRemoteService shippingMethodRemoteService;
+  private PaymentMethodRemoteService paymentMethodRemoteService;
+  private VersionRemoteService versionRemoteService;
 
   public RemoteServiceFactory(final SoapClient magentoClient) {
     this.magentoClient = magentoClient;
@@ -69,7 +78,31 @@ public class RemoteServiceFactory {
   }
 
   /**
-   * @return the shipmentRemoteService
+   * @return the StoreRemoteService
+   */
+  public ShippingMethodRemoteService getShippingMethodRemoteService() {
+    ShippingMethodRemoteService shippingMethodRemoteService = new ShippingMethodRemoteServiceImpl(magentoClient);
+    return shippingMethodRemoteService ;
+  }
+
+  /**
+   * @return the StoreRemoteService
+   */
+  public PaymentMethodRemoteService getPaymentMethodRemoteService() {
+    PaymentMethodRemoteService paymentRemoteService = new PaymentMethodRemoteServiceImpl(magentoClient);
+    return paymentRemoteService;
+  }
+
+  /**
+   * @return the StoreRemoteService
+   */
+  public VersionRemoteService getVersionRemoteService() {
+    VersionRemoteService versionRemoteService = new VersionRemoteServiceImpl(magentoClient);
+    return versionRemoteService;
+  }
+
+  /**
+   * @return the StoreRemoteService
    */
   public StoreRemoteService getStoreRemoteService() {
     StoreRemoteService storeRemoteService = new StoreRemoteServiceImpl(magentoClient);
