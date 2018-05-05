@@ -1,6 +1,6 @@
 package net.magja.service.methods.payment;
 
-import net.magja.model.methods.shipping.PaymentMethod;
+import net.magja.model.methods.payment.PaymentMethod;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
 

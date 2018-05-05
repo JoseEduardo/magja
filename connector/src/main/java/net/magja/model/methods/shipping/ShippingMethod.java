@@ -3,7 +3,7 @@ package net.magja.model.methods.shipping;
 import net.magja.model.BaseMagentoModel;
 import net.magja.soap.Configuration;
 
-public class PaymentMethod extends BaseMagentoModel {
+public class ShippingMethod extends BaseMagentoModel {
 
   private String value;
 
@@ -29,4 +29,5 @@ public class PaymentMethod extends BaseMagentoModel {
   public Object serializeToApi(Configuration configuration) {
     return null;
   }
+
 }

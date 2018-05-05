@@ -1,7 +1,7 @@
 package net.magja.service.methods.shipping;
 
 import net.magja.magento.ResourcePath;
-import net.magja.model.methods.payment.ShippingMethod;
+import net.magja.model.methods.shipping.ShippingMethod;
 import net.magja.service.GeneralServiceImpl;
 import net.magja.service.ServiceException;
 import net.magja.soap.SoapClient;
