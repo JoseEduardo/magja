@@ -725,6 +725,24 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
 
   }
 
+  /**
+   * Method using Magja extension.
+   *
+   * @param productSku
+   * @throws ServiceException
+   */
+  @Override
+  public String getConfigurableBySimple(String productSku) throws ServiceException {
+
+    try {
+      return soapClient.callArgs(ResourcePath.ProductConfigurableBySimple, null);
+    } catch (AxisFault e) {
+      e.printStackTrace();
+      throw new ServiceException(e.getMessage());
+    }
+
+  }
+
   @Override
   public void setAssociatedProducts(String productSku, Map<String, String> childProducts) throws ServiceException {
 
