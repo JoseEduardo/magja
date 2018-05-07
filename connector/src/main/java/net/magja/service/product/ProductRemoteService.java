@@ -211,6 +211,8 @@ public interface ProductRemoteService extends GeneralService<Product> {
 
   String getConfigurableBySimple(String productSku) throws ServiceException;
 
+  List<Product> getAllSimpleByConfigurable(String id) throws ServiceException;
+
   /**
    * Activates the store default manage stock property
    * @param product product with SKU or ID set.

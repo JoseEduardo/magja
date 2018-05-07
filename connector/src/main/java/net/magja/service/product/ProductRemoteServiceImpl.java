@@ -744,6 +744,31 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
   }
 
   @Override
+  public List<Product> getAllSimpleByConfigurable(String id) throws ServiceException {
+    List<Product> products = new ArrayList<Product>();
+
+    List<String> productList;
+
+    try {
+      productList = soapClient.callArgs(ResourcePath.ProductAllSimpleByConfigurable,  new Object[] {id});
+    } catch (AxisFault e) {
+      if (debug)
+        e.printStackTrace();
+      throw new ServiceException(e.getMessage());
+    }
+
+    if (productList == null) {
+      return products;
+    }
+
+    for (String mpp : productList) {
+
+      products.add(new Product(Integer.valueOf(mpp)));
+    }
+    return products;
+  }
+
+  @Override
   public void setAssociatedProducts(String productSku, Map<String, String> childProducts) throws ServiceException {
 
     try {

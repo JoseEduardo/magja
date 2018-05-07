@@ -27,6 +27,7 @@ public enum ResourcePath {
     ProductConfigurableBySimple("catalog_product_configurable.getConfigurableBySimple"),
     ProductConfigurableAttributes("catalog_product_configurable.setConfigurableAttributes"),
     ProductAssociateChildren("catalog_product_configurable.associateSimpleChildren"),
+    ProductAllSimpleByConfigurable("catalog_product_configurable.getAllSimpleByConfigurable"),
 
     ProductCreate("catalog_product.create"),
     ProductUpdate("catalog_product.update"),
