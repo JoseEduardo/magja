@@ -744,13 +744,13 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
   }
 
   @Override
-  public List<Product> getAllSimpleByConfigurable(String id) throws ServiceException {
+  public List<Product> getAllSimpleByConfigurable(String sku) throws ServiceException {
     List<Product> products = new ArrayList<Product>();
 
     List<String> productList;
 
     try {
-      productList = soapClient.callArgs(ResourcePath.ProductAllSimpleByConfigurable,  new Object[] {id});
+      productList = soapClient.callArgs(ResourcePath.ProductAllSimpleByConfigurable,  new Object[] {sku});
     } catch (AxisFault e) {
       if (debug)
         e.printStackTrace();
