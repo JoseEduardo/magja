@@ -1,9 +1,6 @@
 package net.magja.service.product;
 
-import net.magja.model.product.Product;
-import net.magja.model.product.ProductRefMagja;
-import net.magja.model.product.ProductType;
-import net.magja.model.product.ProductUpdatePrice;
+import net.magja.model.product.*;
 import net.magja.service.GeneralService;
 import net.magja.service.ServiceException;
 import net.magja.soap.Configuration;
@@ -211,7 +208,9 @@ public interface ProductRemoteService extends GeneralService<Product> {
 
   String getConfigurableBySimple(String productSku) throws ServiceException;
 
-  List<Product> getAllSimpleByConfigurable(String id) throws ServiceException;
+  List<Product> getAllSimpleByConfigurable(String sku) throws ServiceException;
+
+  List<ConfigurableAttributeData> getConfigurableProductOptions(String sku) throws ServiceException;
 
   /**
    * Activates the store default manage stock property

@@ -769,6 +769,17 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
   }
 
   @Override
+  public List<ConfigurableAttributeData> getConfigurableProductOptions(String sku) throws ServiceException {
+    try {
+      return soapClient.callArgs(ResourcePath.ProductConfigurableProductOptions,  new Object[] {sku});
+    } catch (AxisFault e) {
+      if (debug)
+        e.printStackTrace();
+      throw new ServiceException(e.getMessage());
+    }
+  }
+
+  @Override
   public void setAssociatedProducts(String productSku, Map<String, String> childProducts) throws ServiceException {
 
     try {
