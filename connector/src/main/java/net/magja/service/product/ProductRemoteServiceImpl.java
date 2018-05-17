@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Product service implementation.
@@ -770,13 +771,56 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
 
   @Override
   public List<ConfigurableAttributeData> getConfigurableProductOptions(String sku) throws ServiceException {
+    List<ConfigurableAttributeData> options = new ArrayList<ConfigurableAttributeData>();
+    List<Map<String, Object>> optionsList;
     try {
-      return soapClient.callArgs(ResourcePath.ProductConfigurableProductOptions,  new Object[] {sku});
+      optionsList = soapClient.callArgs(ResourcePath.ProductConfigurableProductOptions,  new Object[] {sku});
     } catch (AxisFault e) {
       if (debug)
         e.printStackTrace();
       throw new ServiceException(e.getMessage());
     }
+
+    if (optionsList == null) {
+      return options;
+    }
+
+    for (Map<String, Object> mpp : optionsList) {
+      options.add(buildConfigAttrData(mpp));
+    }
+
+    return options;
+  }
+
+  private ConfigurableAttributeData buildConfigAttrData(Map<String, Object> mpp) {
+    ConfigurableAttributeData option = new ConfigurableAttributeData();
+
+    // populate the basic fields
+    for (Map.Entry<String, Object> attribute : mpp.entrySet())
+      if(attribute.getKey().equals("values")){
+        List lstValues = (List)attribute.getValue();
+
+        List collect = (List) lstValues.stream()
+          .map(val -> {
+            HashMap valHash = (HashMap) val;
+            return buildValuesOptions(valHash);
+          })
+          .collect(Collectors.toList());
+
+        option.setValues(collect);
+      }else {
+        option.set(attribute.getKey(), attribute.getValue());
+      }
+
+    return option;
+  }
+
+  private Object buildValuesOptions(HashMap valHash) {
+    ConfigurableData configurableData = new ConfigurableData();
+    configurableData.setLabel(valHash.get("label").toString());
+    configurableData.setValueIndex(Integer.valueOf(valHash.get("valueIndex").toString()));
+
+    return configurableData;
   }
 
   @Override
