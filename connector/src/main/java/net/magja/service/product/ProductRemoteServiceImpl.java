@@ -344,6 +344,31 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
   }
 
   @Override
+  public List<Product> listWithAttributes(boolean dependencies, Set<String> attributesToSelect) throws ServiceException {
+    List<Product> products = new ArrayList<Product>();
+
+    List<Map<String, Object>> productList;
+
+    try {
+      productList = soapClient.callArgs(ResourcePath.ProductList,
+        new Object[] { null, null, attributesToSelect.toArray(new String[] {}) });
+    } catch (AxisFault e) {
+      if (debug)
+        e.printStackTrace();
+      throw new ServiceException(e.getMessage());
+    }
+
+    if (productList == null) {
+      return products;
+    }
+
+    for (Map<String, Object> mpp : productList) {
+      products.add(buildProduct(mpp, ImmutableSet.<String> of(), dependencies));
+    }
+    return products;
+  }
+
+  @Override
   public Product getBySku(String sku) throws ServiceException {
     return getBySku(sku, false);
   }

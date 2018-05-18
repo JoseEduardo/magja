@@ -88,6 +88,8 @@ public interface ProductRemoteService extends GeneralService<Product> {
    */
   List<Product> listAllPlus(Set<String> attributesToSelect) throws ServiceException;
 
+  List<Product> listWithAttributes(boolean dependencies, Set<String> attributesToSelect) throws ServiceException;
+
   /**
    * Create a product to Magento.
    *
