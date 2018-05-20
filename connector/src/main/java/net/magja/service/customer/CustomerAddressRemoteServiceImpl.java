@@ -131,7 +131,7 @@ public class CustomerAddressRemoteServiceImpl extends GeneralServiceImpl<Custome
       }
     } else {
       try {
-        Boolean success = (Boolean) soapClient.callArgs(ResourcePath.CustomerAddressUpdate, customerAddress.serializeToApi(configuration));
+        Boolean success = (Boolean) soapClient.callReallySingle(ResourcePath.CustomerAddressUpdate, customerAddress.serializeToApiSingle(configuration));
         if (!success)
           throw new ServiceException("Error updating Customer Address");
       } catch (AxisFault e) {
