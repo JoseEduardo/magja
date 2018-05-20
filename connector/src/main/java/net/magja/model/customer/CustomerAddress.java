@@ -34,6 +34,18 @@ public class CustomerAddress extends Address<Object[]> {
 		return new Object[] {params};
 	}
 
+  public Object serializeToApiSingle(Configuration configuration) {
+    Map<String, Object> props = getAllProperties();
+    props.remove("customer_address_id");
+
+    List<Object> params = new LinkedList<Object>();
+    // if its a update (id != null), put the address id, otherwise (create) put the customer id
+    params.add((this.id != null ? this.id : customer.getId()));
+    params.add(props);
+
+    return params;
+  }
+
 	/**
 	 * @return the defaultBilling
 	 */
