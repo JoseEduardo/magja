@@ -21,7 +21,7 @@ public class StoreRemoteServiceImpl extends GeneralServiceImpl<Store> implements
   private Store buildStore(Map<String, Object> attributes) {
     Store store = new Store();
     store.setWebsiteId(Integer.valueOf(attributes.get("website_id").toString()));
-
+    store.setStoreId(Integer.valueOf(attributes.get("store_id").toString()));
     return store;
   }
 

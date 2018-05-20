@@ -27,6 +27,7 @@ public class OrderForm extends BaseMagentoModel<Map<String, Object>> {
 	private BasicAddress shippingAddress;
 
 	private String paymentMethod = "banktransfer";
+  private String paymentDescription = "Flat Rate - Fixed";
 	private String shippingMethod = "flatrate_flatrate";
 	private Double shippingAmount;
 	private String shippingDescription = "Flat Rate - Fixed";
@@ -219,9 +220,17 @@ public class OrderForm extends BaseMagentoModel<Map<String, Object>> {
 		this.shippingDescription = shippingDescription;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+  public String getPaymentDescription() {
+    return paymentDescription;
+  }
+
+  public void setPaymentDescription(String paymentDescription) {
+    this.paymentDescription = paymentDescription;
+  }
+
+  /* (non-Javadoc)
+       * @see java.lang.Object#toString()
+       */
 	@Override
 	public String toString() {
 		return "OrderForm [customerId=" + customerId + ", items=" + items + ", shippingAddress="+ shippingAddress + ", billingAddress="+ billingAddress + "]";
