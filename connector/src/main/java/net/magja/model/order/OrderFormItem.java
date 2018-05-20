@@ -69,7 +69,7 @@ public class OrderFormItem implements Serializable {
        */
   @Override
   public String toString() {
-    return "OrderFormItem [productId=" + productId + ", qty=" + qty + "]";
+    return "OrderFormItem [productId=" + productId + ", qty=" + qty + ", price=" + price + "]";
   }
 
 }

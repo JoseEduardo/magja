@@ -86,7 +86,8 @@ public class OrderForm extends BaseMagentoModel<Map<String, Object>> {
 			public Map<String, ?> apply(OrderFormItem input) {
 				return ImmutableMap.of(
 						"product_id", input.getProductId(),
-						"qty", input.getQty());
+						"qty", input.getQty(),
+            "price", input.getPrice());
 			}
 		});
 
