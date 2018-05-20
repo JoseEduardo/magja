@@ -28,6 +28,17 @@ public interface SoapClient {
   <T, R> R callSingle(ResourcePath path, T arg) throws AxisFault;
 
   /**
+   * Calls Magento API with single argument.
+   *
+   * @param path
+   * @param arg
+   * @return
+   * @throws AxisFault
+   */
+  <T, R> R callReallySingle(ResourcePath path, T arg) throws AxisFault;
+
+
+  /**
    * Calls Magento API without arguments.
    * @param path
    * @return

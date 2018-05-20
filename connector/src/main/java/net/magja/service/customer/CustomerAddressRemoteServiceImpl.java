@@ -118,7 +118,7 @@ public class CustomerAddressRemoteServiceImpl extends GeneralServiceImpl<Custome
     if (customerAddress.getId() == null) {
       try {
         Object[] customerAddressObj = customerAddress.serializeToApi(configuration);
-        Integer id = Integer.parseInt((String) soapClient.callArgs(ResourcePath.CustomerAddressCreate, customerAddressObj));
+        Integer id = Integer.parseInt((String) soapClient.callReallySingle(ResourcePath.CustomerAddressCreate, customerAddressObj[0]));
         customerAddress.setId(id);
       } catch (NumberFormatException e) {
         if (debug)

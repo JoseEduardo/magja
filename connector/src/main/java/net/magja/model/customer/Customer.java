@@ -8,6 +8,7 @@ import net.magja.model.BaseMagentoModel;
 import net.magja.soap.Configuration;
 import net.magja.utils.MagjaStringUtils;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -85,19 +86,24 @@ public class Customer extends BaseMagentoModel {
   public Object serializeToApi(Configuration configuration) {
 
     Map<String, Object> props = getAllProperties();
+
     props.remove("customer_id");
     if (gender != null)
       props.put("gender", gender.getValue());
     if (password != null)
       props.put("password_hash", MagjaStringUtils.getMd5Hash(password));
 
-    List<Object> params = new LinkedList<Object>();
+    Map<String, Object> newProps = new HashMap<>();
+    for (Map.Entry<String, Object> prop : props.entrySet()) {
+      newProps.put(prop.getKey().toLowerCase(), prop.getValue());
+    }
 
-    // if its a update, put the customer id
-    if (id != null)
-      params.add(id);
+    if (id == null)
+      return newProps;
 
-    params.add(props);
+    Map<String, Object> params = new HashMap<>();
+    params.put("customerId", id);
+    params.put("customerData", newProps);
 
     return params;
   }

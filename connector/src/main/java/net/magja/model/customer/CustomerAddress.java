@@ -7,6 +7,7 @@ package net.magja.model.customer;
 import net.magja.model.address.Address;
 import net.magja.soap.Configuration;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,21 +22,14 @@ public class CustomerAddress extends Address<Object[]> {
 
 	private Boolean defaultShipping;
 
-	/* (non-Javadoc)
-	 * @see net.magja.magja.model.BaseMagentoModel#serializeToApi()
-	 */
 	@Override
 	public Object[] serializeToApi(Configuration configuration) {
-
 		Map<String, Object> props = getAllProperties();
 		props.remove("customer_address_id");
 
-		List<Object> params = new LinkedList<Object>();
-
-		// if its a update (id != null), put the address id, otherwise (create) put the customer id
-		params.add((this.id != null ? this.id : customer.getId()));
-
-		params.add(props);
+    Map<String, Object> params = new HashMap<>();
+		params.put("customerId", (this.id != null ? this.id : customer.getId()));
+		params.put("addressdata", props);
 
 		return new Object[] {params};
 	}

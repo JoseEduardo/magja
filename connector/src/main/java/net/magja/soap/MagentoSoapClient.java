@@ -191,6 +191,14 @@ public class MagentoSoapClient implements SoapClient {
     return call(pathString, new Object[]{arg});
   }
 
+  @Override
+  public <T, R> R callReallySingle(final ResourcePath path, T arg) throws AxisFault {
+    if (arg != null && arg.getClass().isArray())
+      log.warn("Passing array argument to callSingle {}, probably you want to call callArgs?", path);
+    final String pathString = path.getPath();
+    return call(pathString, arg);
+  }
+
   /**
    * Dynamic version of call.
    *

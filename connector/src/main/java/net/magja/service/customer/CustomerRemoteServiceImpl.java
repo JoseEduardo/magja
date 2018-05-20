@@ -178,7 +178,7 @@ public class CustomerRemoteServiceImpl extends GeneralServiceImpl<Customer> impl
 
     if (customer.getId() == null) {
       try {
-        Integer id = Integer.parseInt((String) soapClient.callSingle(ResourcePath.CustomerCreate, customer));
+        Integer id = Integer.parseInt((String) soapClient.callSingle(ResourcePath.CustomerCreate, customer.serializeToApi(configuration)));
         customer.setId(id);
       } catch (NumberFormatException e) {
         if (debug)
