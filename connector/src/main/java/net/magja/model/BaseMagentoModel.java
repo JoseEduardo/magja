@@ -1,10 +1,10 @@
 package net.magja.model;
 
+import net.magja.soap.Configuration;
 import net.magja.utils.PropertyLoader;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
-import net.magja.soap.Configuration;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -46,8 +46,7 @@ public abstract class BaseMagentoModel<S> implements Serializable {
   }
 
   /**
-   * @param id
-   *          the id to set
+   * @param id the id to set
    */
   public void setId(Integer id) {
     this.id = id;
@@ -155,9 +154,6 @@ public abstract class BaseMagentoModel<S> implements Serializable {
       } catch (SecurityException e) {
         e.printStackTrace();
         throw new Exception("SecurityException calling method " + methodName + " on " + tClass.getName());
-      } catch (NoSuchMethodException e) {
-        // e.printStackTrace();
-        throw new Exception("NoSuchMethodException calling method " + methodName + " on " + tClass.getName());
       }
     }
 
