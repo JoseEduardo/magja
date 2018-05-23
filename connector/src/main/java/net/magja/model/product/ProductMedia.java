@@ -83,7 +83,7 @@ public class ProductMedia extends BaseMagentoModel<Object[]> {
 
     props.put("file", image.serializeToApi());
 
-    return new Object[]{product.getSku(), props};
+    return new Object[]{product.getId(), props};
   }
 
   /**
