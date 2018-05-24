@@ -228,6 +228,7 @@ public class MagentoSoapClient implements SoapClient {
 
     OMElement result = null;
     try {
+      sender.getOptions().setTimeOutInMilliSeconds(20000);
       result = sender.sendReceive(method);
     } catch (AxisFault axisFault) {
       if (axisFault.getMessage().toUpperCase().indexOf("SESSION EXPIRED") >= 0) {
