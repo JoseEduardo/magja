@@ -228,7 +228,7 @@ public class MagentoSoapClient implements SoapClient {
 
     OMElement result = null;
     try {
-      int timeOutInMilliSeconds = 20000;
+      int timeOutInMilliSeconds = 40000;
       sender.getOptions().setTimeOutInMilliSeconds(timeOutInMilliSeconds);
       sender.getOptions().setProperty(HTTPConstants.SO_TIMEOUT, timeOutInMilliSeconds);
       sender.getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeOutInMilliSeconds);
