@@ -236,7 +236,11 @@ public class MagentoSoapClient implements SoapClient {
         login();
         result = sender.sendReceive(method);
       } else {
-        throw axisFault;
+        if(axisFault.getMessage().toUpperCase().indexOf("READ TIMED OUT") >= 0) {
+          log.info("Timeout: ", axisFault);
+        } else {
+          throw axisFault;
+        }
       }
     }
     log.info("Called {} {} at {}@{} with session {}", new Object[]{pathString, args, config.getApiUser(), config.getRemoteHost(), sessionId});
