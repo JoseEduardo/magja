@@ -238,6 +238,7 @@ public class MagentoSoapClient implements SoapClient {
         throw axisFault;
       }
     }
+    log.info("Called {} {} at {}@{} with session {}", new Object[]{pathString, args, config.getApiUser(), config.getRemoteHost(), sessionId});
     return (R) returnParser.parse(result.getFirstChildWithName(CALL_RETURN));
   }
 
