@@ -40,64 +40,20 @@ public class MagentoSoapClient implements SoapClient {
   private String sessionId;
   private ServiceClient sender;
 
-  // holds all the created instances by creation order, Multiton Pattern
-  private static final Map<SoapConfig, SoapClient> INSTANCES = new LinkedHashMap<SoapConfig, SoapClient>();
-
-  private static Optional<Map.Entry<SoapConfig, SoapClient>> getByConfiguration(Configuration configuration) {
-    return INSTANCES.entrySet().stream()
-      .filter(x -> x.getKey().getIdConfiguration().equals(configuration.getId()))
-      .findFirst();
-  }
-
-  /**
-   * Returns the default instance, or a newly created one from the
-   * magento-api.properties file, if there is no default instance. The default
-   * instance is the first one created.
-   *
-   * @return the default instance or a newly created one
-   */
-  public static SoapClient getInstance(Configuration configuration) {
-
-    Optional<Map.Entry<SoapConfig, SoapClient>> soapStorage = getByConfiguration(configuration);
-
-    SoapClient soapClient = !soapStorage.isPresent() ? getInstance(configuration, null) : soapStorage.get().getValue();
-    if (soapClient.getConfig().getIdConfiguration().equals(configuration.getId())) {
-      return soapClient;
-    }
-    return null;
-  }
-
   /**
    * Returns the instance that was created with the specified configuration or
    * create one if the instance does not exist.
    *
    * @return the already created instance or a new one
    */
-  public static SoapClient getInstance(Configuration configuration, final SoapConfig soapConfig) {
-    // if has default instance and soapConfig is null
-    Optional<Map.Entry<SoapConfig, SoapClient>> soapStorage = getByConfiguration(configuration);
-    if (soapStorage.isPresent()) {
-      return soapStorage.get().getValue();
+  public static SoapClient getInstance(Configuration configuration) {
+    SoapConfig loadedSoapConfig = null;
+    loadedSoapConfig = new SoapConfig(configuration);
+    if (loadedSoapConfig == null) { // still null?
+      throw new RuntimeException("Cannot create soapConfig");
     }
 
-    synchronized (INSTANCES) {
-      SoapConfig loadedSoapConfig = null;
-      if (soapConfig == null) {
-        loadedSoapConfig = new SoapConfig(configuration);
-        if (loadedSoapConfig == null) { // still null?
-          throw new RuntimeException("Cannot create soapConfig");
-        }
-      } else {
-        loadedSoapConfig = soapConfig;
-      }
-
-      SoapClient instance = INSTANCES.get(loadedSoapConfig);
-      if (instance == null) {
-        instance = new MagentoSoapClient(loadedSoapConfig);
-        INSTANCES.put(loadedSoapConfig, instance);
-      }
-      return instance;
-    }
+    return new MagentoSoapClient(loadedSoapConfig);
   }
 
   /**
