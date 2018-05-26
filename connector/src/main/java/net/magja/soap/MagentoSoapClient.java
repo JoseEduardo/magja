@@ -18,7 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PreDestroy;
 import javax.xml.namespace.QName;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Magento SOAP Client.
@@ -39,6 +42,9 @@ public class MagentoSoapClient implements SoapClient {
 
   private String sessionId;
   private ServiceClient sender;
+
+  // holds all the created instances by creation order, Multiton Pattern
+  private static final Map<Long, String> INSTANCES = new LinkedHashMap<Long, String>();
 
   /**
    * Returns the instance that was created with the specified configuration or
@@ -91,12 +97,14 @@ public class MagentoSoapClient implements SoapClient {
     if (callFactory != null && sender != null) {
       // first, we need to logout the previous session
       if (sessionId != null) {
+        /*
         OMElement logoutMethod = callFactory.createLogoutCall(sessionId);
         try {
           sender.sendReceive(logoutMethod);
         } catch (Exception e) {
-          log.warn("Cannot logout Magento SOAP API from session " + sessionId, e);
         }
+        */
+        //INSTANCES.values().remove(sessionId);
         sessionId = null;
       }
       try {
@@ -195,7 +203,7 @@ public class MagentoSoapClient implements SoapClient {
         login();
         result = sender.sendReceive(method);
       } else {
-        if(axisFault.getMessage().toUpperCase().indexOf("READ TIMED OUT") >= 0) {
+        if (axisFault.getMessage().toUpperCase().indexOf("READ TIMED OUT") >= 0) {
           log.info("Timeout: ", axisFault);
         } else {
           throw axisFault;
@@ -220,18 +228,26 @@ public class MagentoSoapClient implements SoapClient {
    * Connect to the service using the current config
    */
   protected void login() throws AxisFault {
+    synchronized (INSTANCES) {
+      if (!INSTANCES.containsKey(config.getIdConfiguration())) {
+        /*
+        if (isLoggedIn()) {
+          // relogin
+          logout();
+        }
+        */
+        OMElement loginMethod = callFactory.createLoginCall(this.config.getApiUser(), this.config.getApiKey());
+        log.info("====================================== Logging in user: {}", this.config.getApiUser());
+        OMElement loginResult = sender.sendReceive(loginMethod);
 
-    if (isLoggedIn()) {
-      // relogin
-      logout();
+        sessionId = loginResult.getFirstChildWithName(LOGIN_RETURN).getText();
+        INSTANCES.put(config.getIdConfiguration(), sessionId);
+        log.info("====================================== Logged in sessionId: {}", sessionId);
+      } else {
+        sessionId = INSTANCES.get(config.getIdConfiguration());
+      }
+
     }
-
-    OMElement loginMethod = callFactory.createLoginCall(this.config.getApiUser(), this.config.getApiKey());
-    log.info("====================================== Logging in user: {}", this.config.getApiUser());
-    OMElement loginResult = sender.sendReceive(loginMethod);
-
-    sessionId = loginResult.getFirstChildWithName(LOGIN_RETURN).getText();
-    log.info("====================================== Logged in sessionId: {}", sessionId);
   }
 
   /**

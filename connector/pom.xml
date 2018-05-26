@@ -4,7 +4,7 @@
     <parent>
       <groupId>net.magja</groupId>
       <artifactId>magja-parent</artifactId>
-      <version>1.6.0</version>
+      <version>1.6.5</version>
     </parent>
 
 
