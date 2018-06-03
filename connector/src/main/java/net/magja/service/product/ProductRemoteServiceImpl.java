@@ -194,7 +194,6 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
    * @throws ServiceException
    */
   private List<Category> getCategoriesBasicInfo(List<Object> ids) throws ServiceException {
-    log.info("getCategoriesBasicInfo {}", ids);
     List<Category> categories = new ArrayList<Category>();
     for (Object obj : ids) {
       Integer id = Integer.parseInt((String) obj);

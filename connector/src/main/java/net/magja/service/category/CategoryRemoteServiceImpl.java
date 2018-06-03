@@ -74,7 +74,6 @@ public class CategoryRemoteServiceImpl extends GeneralServiceImpl<Category> impl
    */
   @Override
   public Category getByIdClean(Integer id) throws ServiceException {
-    log.info("getIdByClean {}", id);
     Category category = new Category();
 
     if (id == null) {
