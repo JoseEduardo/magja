@@ -29,7 +29,7 @@ public interface ProductRemoteService extends GeneralService<Product> {
    * @return Product
    * @throws ServiceException
    */
-  Product getBySku(String sku) throws ServiceException;
+  Product getBySku(String sku, String storeView) throws ServiceException;
 
   /**
    * Get the product from Magento with the specified sku
@@ -39,13 +39,13 @@ public interface ProductRemoteService extends GeneralService<Product> {
    * @return Product
    * @throws ServiceException
    */
-  Product getBySku(String sku, boolean dependencies) throws ServiceException;
+  Product getBySku(String sku, boolean dependencies, String storeView) throws ServiceException;
 
-  Product getBySku(String sku, Set<String> attributes, boolean dependencies) throws ServiceException;
+  Product getBySku(String sku, Set<String> attributes, boolean dependencies, String storeView) throws ServiceException;
 
-  Product getBySku(String sku, Set<String> attributes) throws ServiceException;
+  Product getBySku(String sku, Set<String> attributes, String storeView) throws ServiceException;
 
-  Product getBySku(String sku, Set<String> attributes, Set<Dependency> dependencies) throws ServiceException;
+  Product getBySku(String sku, Set<String> attributes, Set<Dependency> dependencies, String storeView) throws ServiceException;
 
   /**
    * Get the product from Magento with the specified id
@@ -239,7 +239,7 @@ public interface ProductRemoteService extends GeneralService<Product> {
    */
   void setManageStock(Product product, boolean manageStock) throws ServiceException;
 
-  Product getBySkuWithCategories(String sku) throws ServiceException;
+  Product getBySkuWithCategories(String sku, String storeView) throws ServiceException;
 
   /**
    * Get a list of products updated since the given date

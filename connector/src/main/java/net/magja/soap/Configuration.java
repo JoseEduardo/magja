@@ -23,6 +23,8 @@ public class Configuration {
   private String httpProxyUsername;
   private String httpProxyPassword;
 
+  private String storeView;
+
   public Long getId() {
     return id;
   }
@@ -141,5 +143,13 @@ public class Configuration {
 
   public void setHttpProxyPassword(String httpProxyPassword) {
     this.httpProxyPassword = httpProxyPassword;
+  }
+
+  public String getStoreView() {
+    return storeView;
+  }
+
+  public void setStoreView(String storeView) {
+    this.storeView = storeView;
   }
 }

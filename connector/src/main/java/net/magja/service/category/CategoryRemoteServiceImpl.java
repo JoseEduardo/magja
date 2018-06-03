@@ -574,8 +574,8 @@ public class CategoryRemoteServiceImpl extends GeneralServiceImpl<Category> impl
   /**
    * Get list of assigned products in default store
    */
-  public List<Product> getProducts(Category category) throws ServiceException {
-    return getProducts(category, 1, false);
+  public List<Product> getProducts(Category category, String storeView) throws ServiceException {
+    return getProducts(category, 1, storeView, false);
   }
 
   /**
@@ -583,7 +583,7 @@ public class CategoryRemoteServiceImpl extends GeneralServiceImpl<Category> impl
    * will contain only following attributes: product_id, type, set, sku. All
    * other attributes will be null.
    */
-  public List<Product> getProducts(Category category, Integer storeID, boolean dependencies) throws ServiceException {
+  public List<Product> getProducts(Category category, Integer storeID, String storeView, boolean dependencies) throws ServiceException {
 
     if (category == null)
       return null;
@@ -613,10 +613,10 @@ public class CategoryRemoteServiceImpl extends GeneralServiceImpl<Category> impl
 
       if (dependencies) {
         // buid a full product object if required
-        product = serviceFactory.getProductRemoteService().getBySku(mpp.get("sku").toString(), true);
+        product = serviceFactory.getProductRemoteService().getBySku(mpp.get("sku").toString(), true, storeView);
       } else {
         // get minimal product object
-        product = serviceFactory.getProductRemoteService().getBySku(mpp.get("sku").toString(), false);
+        product = serviceFactory.getProductRemoteService().getBySku(mpp.get("sku").toString(), false, storeView);
       }
 
       products.add(product);
@@ -656,7 +656,7 @@ public class CategoryRemoteServiceImpl extends GeneralServiceImpl<Category> impl
 
     List<Category> emptyCategories = new ArrayList<Category>();
     for (Category category : lastCategories) {
-      if (getProducts(category).isEmpty()) {
+      if (getProducts(category, null).isEmpty()) {
         emptyCategories.add(category);
       }
     }
@@ -701,7 +701,7 @@ public class CategoryRemoteServiceImpl extends GeneralServiceImpl<Category> impl
    * @throws ServiceException
    */
   public Boolean isEmpty(Category category) throws ServiceException {
-    if (category.getChildren().isEmpty() && getProducts(category).isEmpty()) {
+    if (category.getChildren().isEmpty() && getProducts(category, null).isEmpty()) {
       return true;
     } else {
       return false;

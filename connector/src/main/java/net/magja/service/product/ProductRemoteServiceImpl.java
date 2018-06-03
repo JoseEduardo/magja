@@ -300,7 +300,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
    */
   @Override
   public void deleteWithEmptyCategory(String sku) throws ServiceException {
-    Product product = getBySku(sku);
+    Product product = getBySku(sku, null);
     List<Category> categories = product.getCategories();
 
     delete(sku);
@@ -369,18 +369,18 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
   }
 
   @Override
-  public Product getBySku(String sku) throws ServiceException {
-    return getBySku(sku, false);
+  public Product getBySku(String sku, String storeView) throws ServiceException {
+    return getBySku(sku, false, storeView);
   }
 
   @Override
-  public Product getBySku(String sku, Set<String> attributes) throws ServiceException {
-    return getBySku(sku, attributes, false);
+  public Product getBySku(String sku, Set<String> attributes, String storeView) throws ServiceException {
+    return getBySku(sku, attributes, false, storeView);
   }
 
   @Override
-  public Product getBySkuWithCategories(String sku) throws ServiceException {
-    Map<String, Object> mpp = loadBaseProduct(sku, ImmutableSet.<String> of());
+  public Product getBySkuWithCategories(String sku, String storeView) throws ServiceException {
+    Map<String, Object> mpp = loadBaseProduct(sku, ImmutableSet.<String> of(), storeView);
 
     if (mpp == null) {
       return null;
@@ -390,12 +390,12 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
   }
 
   @Override
-  public Product getBySku(String sku, boolean dependencies) throws ServiceException {
-    return getBySku(sku, ImmutableSet.<String> of(), dependencies);
+  public Product getBySku(String sku, boolean dependencies, String storeView) throws ServiceException {
+    return getBySku(sku, ImmutableSet.<String> of(), dependencies, storeView);
   }
 
-  public Product getBySku(String sku, Set<String> attributes, Set<Dependency> dependencies) throws ServiceException {
-    Map<String, Object> mpp = loadBaseProduct(sku, attributes);
+  public Product getBySku(String sku, Set<String> attributes, Set<Dependency> dependencies, String storeView) throws ServiceException {
+    Map<String, Object> mpp = loadBaseProduct(sku, attributes, storeView);
 
     if (mpp == null) {
       return null;
@@ -405,16 +405,16 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
   }
 
   @Override
-  public Product getBySku(String sku, Set<String> attributes, boolean dependencies) throws ServiceException {
+  public Product getBySku(String sku, Set<String> attributes, boolean dependencies, String storeView) throws ServiceException {
     if (dependencies) {
       return getBySku(sku, attributes,
-        ImmutableSet.of(Dependency.CATEGORIES, Dependency.MEDIAS, Dependency.LINKS, Dependency.TYPES, Dependency.ATTRIBUTE_SET, Dependency.INVENTORY));
+        ImmutableSet.of(Dependency.CATEGORIES, Dependency.MEDIAS, Dependency.LINKS, Dependency.TYPES, Dependency.ATTRIBUTE_SET, Dependency.INVENTORY), storeView);
     } else {
-      return getBySku(sku, attributes, ImmutableSet.<Dependency> of());
+      return getBySku(sku, attributes, ImmutableSet.<Dependency> of(), storeView);
     }
   }
 
-  private Map<String, Object> loadBaseProduct(String sku, Set<String> attributes) throws ServiceException {
+  private Map<String, Object> loadBaseProduct(String sku, Set<String> attributes, String storeView) throws ServiceException {
     Map<String, Object> mpp;
     try {
       // There's a bug in Magento not interpreting properly numeric SKUs.
@@ -424,7 +424,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
       // trimmed with Magento.
       if (NumberUtils.isNumber(sku))
         sku = sku + " ";
-      mpp = soapClient.callArgs(ResourcePath.ProductInfo, new Object[] { sku, null, attributes });
+      mpp = soapClient.callArgs(ResourcePath.ProductInfo, new Object[] { sku, storeView, attributes });
     } catch (AxisFault e) {
       log.error("Error calling product.info with sku=" + sku + ", attributes=" + attributes, e);
       if (e.getMessage().indexOf("Product not exists") >= 0) {
@@ -761,7 +761,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
   public String getConfigurableBySimple(String productSku) throws ServiceException {
 
     try {
-      return soapClient.callArgs(ResourcePath.ProductConfigurableBySimple, null);
+      return soapClient.callArgs(ResourcePath.ProductConfigurableBySimple, new Object[] {productSku});
     } catch (AxisFault e) {
       e.printStackTrace();
       throw new ServiceException(e.getMessage());
@@ -896,7 +896,7 @@ public class ProductRemoteServiceImpl extends GeneralServiceImpl<Product> implem
           if (child.getSku() != null && child.getId() != null) {
             // product is already pre-loaded, skip loading it.
           } else {
-            Product existingProduct = getBySku(child.getSku(), false);
+            Product existingProduct = getBySku(child.getSku(), false, null);
             if (existingProduct != null) {
               child.setId(existingProduct.getId());
               childProductData.setExistingProduct(existingProduct);

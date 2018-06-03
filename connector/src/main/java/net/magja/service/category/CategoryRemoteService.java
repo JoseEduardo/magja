@@ -60,9 +60,9 @@ public interface CategoryRemoteService extends GeneralService<Category> {
 
     Category getRequiredCategory(Integer parentId, String categoryName, String availableSortBy, String defaultSortBy, Boolean active, Boolean anchor);
 
-    List<Product> getProducts(Category category) throws ServiceException;
+    List<Product> getProducts(Category category, String storeView) throws ServiceException;
 
-    List<Product> getProducts(Category category, Integer storeID, boolean dependencies) throws ServiceException;
+    List<Product> getProducts(Category category, Integer storeID, String storeView, boolean dependencies) throws ServiceException;
 
     List<Category> getLastCategories(Category categoryTree);
 
